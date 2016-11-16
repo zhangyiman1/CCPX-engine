@@ -10,10 +10,10 @@
      <!-- 本地配置    -->
      
     <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
-    <property name="user" value="temp_user_functi"></property>
-    <property name="password" value="qwerty65536"></property>
+    <property name="user" value="root"></property>
+    <property name="password" value="3220107"></property>
     <property name="driverClass" value="com.mysql.jdbc.Driver"></property>
-    <property name="jdbcUrl" value="jdbc:mysql://yifanslab.cn:3306/temp_user_functi?useUnicode=true&amp;characterEncoding=utf-8"></property>
+    <property name="jdbcUrl" value="jdbc:mysql://127.0.0.1:3306/ccpx_db?useUnicode=true&amp;characterEncoding=utf-8"></property>
     <property name="initialPoolSize" value="5"></property>
     <property name="maxPoolSize" value="20"></property>
     </bean>
