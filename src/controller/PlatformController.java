@@ -5,15 +5,20 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import model.Offer;
+import model.Request;
+
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import dao.PlatformDaoImp;
 import service.PlatformService;
 import utils.VerifyCode;
 
@@ -81,4 +86,16 @@ public class PlatformController {
 
 	}
 	
+	
+	 public List<Request> showLatestTransaction(Integer sellerFrom, Integer sellerTo){
+		return new PlatformDaoImp().showLatestTransaction(sellerFrom, sellerTo);
+	 }
+	 
+	 public List<Offer> searchExchange(Integer sellerFrom, Integer sellerTo, Integer pointsFrom, Integer pointsToMin){
+		return new PlatformDaoImp().searchExcahnge(sellerFrom, sellerTo, pointsFrom, pointsToMin); 
+	 }
+	 
+	 public List<Offer> showRecommendationList(Integer sellerFrom, Integer sellerTo, Integer pointsFrom, Integer pointsToMin){
+		return new PlatformDaoImp().searchExcahnge(sellerFrom, sellerTo, pointsFrom, pointsToMin); 
+	 }
 }
