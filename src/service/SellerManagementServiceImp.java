@@ -19,6 +19,11 @@ public class SellerManagementServiceImp implements SellerManagementService {
 	}
 	
 	@Override
+	public seller validateUsername(String username){
+		return sellerManagementDaoImp.validateUsername(username);
+	}
+	
+	@Override
 	public boolean updateSellerinfo(seller seller) {
 
 		return sellerManagementDaoImp.updateSellerinfo(seller);

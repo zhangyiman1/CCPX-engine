@@ -93,5 +93,29 @@ public class InfoManagementController {
             } 
         } 
 	}
+	
+	
+	@RequestMapping("/getSellerInfoByKeyWord")
+	@ResponseBody
+	public void getSellerInfoByKeyWord(HttpServletRequest req, HttpServletResponse res, String keyword) {
+		List<seller> seller_list = infoManagementServiceImp.getSellerInfoByKeyWord(keyword);
+		JSONArray json = JSONArray.fromObject(seller_list);
+        System.out.print(json);
+        System.out.close();
+        PrintWriter out =null;
+        
+        try{
+        out = res.getWriter();
+        out.write(json.toString());
+        out.flush();
+        out.close();
+        }catch (IOException e) {  
+            e.printStackTrace();  
+        } finally {  
+            if (out != null) {  
+                out.close();  
+            } 
+        } 
+	}
 
 }

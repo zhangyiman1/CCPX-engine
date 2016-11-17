@@ -46,6 +46,15 @@ public class SellerManagementDaoImp implements SellerManagementDao {
 		return Seller;
 	}
 	
+	@Override
+	public seller validateUsername(String username) {
+		String hql = "from seller where Seller_Username= :username";
+		Query query = getSession().createQuery(hql);
+		query.setString("username", username);
+		seller Seller = (seller) query.uniqueResult();
+		return Seller;
+	}
+	
 	
 	@Override
 	public boolean updateSellerinfo(seller seller) {

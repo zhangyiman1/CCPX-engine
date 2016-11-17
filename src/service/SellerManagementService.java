@@ -6,6 +6,8 @@ public interface SellerManagementService {
 
 	public seller checkSeller(String username, String password);
 	
+	public seller validateUsername(String username);
+	
 	public boolean updateSellerinfo(seller seller);
 
 	public boolean updatePassword(int Seller_id, String Seller_Password);

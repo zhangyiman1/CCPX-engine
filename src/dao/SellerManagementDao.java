@@ -7,6 +7,8 @@ public interface SellerManagementDao {
 
 	public seller checkSeller(String username, String password);
 	
+	public seller validateUsername(String username);
+	
 	public boolean updateSellerinfo(seller seller);
 
 	public boolean regist(seller seller);

@@ -25,6 +25,12 @@ public class InfoManagementServiceImp implements InfoManagementService {
 	public List<seller> getSellerInfoByIndustryID(String id){
 		return infoManagementDaoImp.getSellerInfoByIndustryID(id);
 	}
+	
+	@Override
+	public List<seller> getSellerInfoByKeyWord(String keyword){
+		return infoManagementDaoImp.getSellerInfoByKeyWord(keyword);
+	}
+	
 	@Override
 	public List<seller> getSellerInfo(){
 		return infoManagementDaoImp.getSellerInfo();

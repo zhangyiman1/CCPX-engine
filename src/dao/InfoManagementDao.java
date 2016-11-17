@@ -10,6 +10,8 @@ public interface InfoManagementDao {
 	
 	public List<seller> getSellerInfoByIndustryID(String id);
 	
+	public List<seller> getSellerInfoByKeyWord(String keyword);
+	
 	public List<seller> getSellerInfo();
 }
 
