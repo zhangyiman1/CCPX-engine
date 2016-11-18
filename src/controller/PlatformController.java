@@ -87,8 +87,15 @@ public class PlatformController {
 	}
 	
 	
-	 public List<Request> showLatestTransaction(Integer sellerFrom, Integer sellerTo){
-		return new PlatformDaoImp().showLatestTransaction(sellerFrom, sellerTo);
+	 @RequestMapping("/showLatestTransaction")
+	 public List<Request> showLatestTransaction(HttpServletRequest req,String sellerFrom, String sellerTo){
+		int from = Integer.valueOf(sellerFrom);
+		int to = Integer.valueOf(sellerTo);
+		List<Request> requests = PlatformServiceImp.showLatestTransaction(from, to);
+		for(Request re : requests){
+			System.out.println(re.getRid() + " " + re.getSellerFrom() + " " + re.getSellerTo()+ " " + re.getUpdateTime());
+		}
+		return requests;
 	 }
 	 
 	 public List<Offer> searchExchange(Integer sellerFrom, Integer sellerTo, Integer pointsFrom, Integer pointsToMin){
