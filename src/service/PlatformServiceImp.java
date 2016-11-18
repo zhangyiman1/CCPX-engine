@@ -36,4 +36,11 @@ public class PlatformServiceImp implements PlatformService{
 		System.out.println("flag: " + flag);
 		return flag;	
 	}
+	
+	@Override
+	public List<Request> showLatestTransaction(Integer sellerFrom, Integer sellerTo)
+	{
+		List<Request> requests = PlatformDaoImp.showLatestTransaction(sellerFrom, sellerTo);		
+		return requests;
+	}
 }
