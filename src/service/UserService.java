@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import model.Notification;
+import model.Offer;
+import model.Record;
 import model.Request;
 import model.User;
 import model.Response;
@@ -23,6 +25,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;  
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import dao.OfferDaoImpl;
+import dao.RecordDaoImpl;
 import dao.UserDaoImpl;
 import utils.UserCommonUtil;
 import utils.MD5Util;
@@ -218,6 +222,113 @@ public class UserService {
          JSONObject json = JSONObject.fromObject( rs );
          out.print(json.toString());
          out.close();
+    }
+    @RequestMapping(value = "/getReference", method = RequestMethod.GET)  
+    @ResponseBody
+    public void getReference(HttpServletRequest request,HttpServletResponse response) throws IOException{
+    	 response.setCharacterEncoding("UTF-8"); 
+         response.setContentType("text/json");
+         int seller_id_from=Integer.parseInt(request.getParameter("seller_id_from"));
+         int seller_id_to =Integer.parseInt(request.getParameter("seller_id_to"));
+         RecordDaoImpl recordDaoImpl=new RecordDaoImpl();
+         List<Record>records=new ArrayList<Record>();
+         try {
+			records=recordDaoImpl.getReferenceRecords(seller_id_from, seller_id_to);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+         //System.out.println(records.size());
+         PrintWriter out = response.getWriter();
+        
+         
+         JSONObject json = new JSONObject();
+         
+         JSONArray jsonArr = new JSONArray();//json格式的数组  
+         JSONObject jsonObjArr = new JSONObject(); 
+         JSONObject json1 = new JSONObject();
+         Record record=new Record();
+          for(int i=0;i<records.size();i++){
+        	  record=records.get(i);
+        	// System.out.println(""+record.getR_id()+record.getU_id_from()+record.getU_id_to()+record.getSeller_id_from()+record.getSeller_id_to());
+        	  jsonObjArr=new JSONObject(); 
+        	  jsonObjArr.put("r_id", record.getR_id());
+        	  jsonObjArr.put("user_from",record.getU_id_from());
+        	  jsonObjArr.put("user_to",	 record.getU_id_to());
+        	  jsonObjArr.put("seller_from",	 record.getSeller_id_from());
+        	  jsonObjArr.put("seller_to",	 record.getSeller_id_to());
+        	  jsonObjArr.put("points_from",	 record.getPoints_from());
+        	  jsonObjArr.put("ponits_to",	 record.getPoints_to());
+        	  jsonObjArr.put("status",	 "accepted");
+        	  jsonArr.add(jsonObjArr);   //??
+        	  jsonObjArr=null;
+          }
+          json.put("errno", 0);
+          json.put("err", 	"");
+          json1.put("record_list", jsonArr);
+          json.put("rsm", json1);
+          out.print(json);
+          System.out.println(json.toString());
+          out.close();
+    }
+    
+    @RequestMapping(value = "/getExchangeOffer", method = RequestMethod.GET)  
+    @ResponseBody
+    public void getExchangeOffer(HttpServletRequest request,HttpServletResponse response) throws IOException{
+    	 response.setCharacterEncoding("UTF-8"); 
+         response.setContentType("text/json");
+         int size=request.getParameterMap().size();
+         OfferDaoImpl offerDaoImpl=new OfferDaoImpl();
+         List<Offer>offers=new ArrayList<Offer>();
+       
+         try {
+        	 if (size==4) {
+        		 int seller_from=Integer.parseInt(request.getParameter("seller_from"));
+                 int seller_to =Integer.parseInt(request.getParameter("seller_to"));
+                 int points_from=Integer.parseInt(request.getParameter("points_from"));
+                 int points_to_min=Integer.parseInt(request.getParameter("points_to_min"));
+        		 offers=offerDaoImpl.getExchangeOffers(seller_from, seller_to,points_from,points_to_min);
+			}
+        	 else{
+        		 int seller_from=Integer.parseInt(request.getParameter("seller_from"));
+                 int seller_to =Integer.parseInt(request.getParameter("seller_to"));
+        		 offers=offerDaoImpl.getExchangeOffers(seller_from, seller_to);
+        	 }
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+         //System.out.println(records.size());
+         PrintWriter out = response.getWriter();
+        
+         
+         JSONObject json = new JSONObject();
+         
+         JSONArray jsonArr = new JSONArray();//json格式的数组  
+         JSONObject jsonObjArr = new JSONObject(); 
+         JSONObject json1 = new JSONObject();
+         //System.out.println(offers.size());
+         Offer offer=new Offer();         
+          for(int i=0;i<offers.size();i++){
+        	  offer=offers.get(i);
+        	  jsonObjArr=new JSONObject(); 
+        	  jsonObjArr.put("offer_id",offer.getOffer_id());
+        	  jsonObjArr.put("user_id",offer.getSeller_from());
+        	  jsonObjArr.put("seller_from",	 offer.getSeller_from());
+        	  jsonObjArr.put("seller_to",	 offer.getSeller_to());
+        	  jsonObjArr.put("points_from",	  offer.getPoints_from());
+        	  jsonObjArr.put("ponits_to_min",	 offer.getPoints_to_min());
+        	  jsonObjArr.put("status",	offer.getStatus());
+        	  jsonArr.add(jsonObjArr);   //??
+        	  jsonObjArr=null;
+          }
+          json.put("errno", 0);
+          json.put("err", 	"");
+          json1.put("exchange_offer", jsonArr);
+          json.put("rsm", json1);
+          out.print(json);
+          System.out.println(json.toString());
+          out.close();
     }
   
 }  

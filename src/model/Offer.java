@@ -1,55 +1,55 @@
 package model;
 
 public class Offer {
-	private int offerID; 
-	private int userID; 
-	private int sellerFrom; 
-	private int sellerTo; 
-	private int pointsFrom; 
-	private int pointsToMin; 
-	private int status;
-	public int getOfferID() {
-		return offerID;
+	int offer_id;
+	int user_id;
+	int seller_from;
+	int seller_to;
+	int points_from;
+	int points_to_min;
+	String status;
+	
+	
+	public int getOffer_id() {
+		return offer_id;
 	}
-	public void setOfferID(int offerID) {
-		this.offerID = offerID;
+	public void setOffer_id(int offer_id) {
+		this.offer_id = offer_id;
 	}
-	public int getUserID() {
-		return userID;
+	public int getUser_id() {
+		return user_id;
 	}
-	public void setUserID(int userID) {
-		this.userID = userID;
+	public void setUser_id(int user_id) {
+		this.user_id = user_id;
 	}
-	public int getSellerFrom() {
-		return sellerFrom;
+	public int getSeller_from() {
+		return seller_from;
 	}
-	public void setSellerFrom(int sellerFrom) {
-		this.sellerFrom = sellerFrom;
+	public void setSeller_from(int seller_from) {
+		this.seller_from = seller_from;
 	}
-	public int getPointsFrom() {
-		return pointsFrom;
+	public int getSeller_to() {
+		return seller_to;
 	}
-	public void setPointsFrom(int pointsFrom) {
-		this.pointsFrom = pointsFrom;
+	public void setSeller_to(int seller_to) {
+		this.seller_to = seller_to;
 	}
-	public int getSellerTo() {
-		return sellerTo;
+	public int getPoints_from() {
+		return points_from;
 	}
-	public void setSellerTo(int sellerTo) {
-		this.sellerTo = sellerTo;
+	public void setPoints_from(int points_from) {
+		this.points_from = points_from;
 	}
-	public int getPointsToMin() {
-		return pointsToMin;
+	public int getPoints_to_min() {
+		return points_to_min;
 	}
-	public void setPointsToMin(int pointsToMin) {
-		this.pointsToMin = pointsToMin;
+	public void setPoints_to_min(int points_to_min) {
+		this.points_to_min= points_to_min;
 	}
-	public int getStatus() {
+	public String getStatus() {
 		return status;
 	}
-	public void setStatus(int status) {
-		this.status = status;
-	} 
-	
-
+	public void setStatus(String status) {
+		this.status= status;
+	}
 }
