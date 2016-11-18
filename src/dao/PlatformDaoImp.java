@@ -59,17 +59,20 @@ public class PlatformDaoImp implements PlatformDao {
 	
 	@Override
  	public List<Request> showLatestTransaction(Integer sellerFrom, Integer sellerTo) {
+		
  		// TODO Auto-generated method stub
- 		String sql = "from request where " + "(SELLER_ID_FROM =? and SELLER_ID_TO =? "
- 				+ "and status = 'accepted')" + " or (SELLER_ID_TO =? and SELLER_ID_FROM =?"
- 				+ "and status = 'accepted')" + " order by UPDATE_TIME desc limit 5";
+ 		String sql = "from Request where " + "(sellerFrom =? and sellerTo =? "
+ 				+ "and status = '2')" + " or (sellerTo =? and sellerFrom =? "
+ 				+ "and status = '2')" + " order by updateTime desc";
  		Query query = getSession().createQuery(sql);
+ 		query.setMaxResults(5);//cann't write limit 5 in sql
  		query.setInteger(0, sellerFrom);
  		query.setInteger(1, sellerTo);
  		query.setInteger(2, sellerFrom);
  		query.setInteger(3, sellerTo);
+ 		System.out.println(query.list());
  		List<Request> requests = query.list();
- 		return requests;
+ 		return requests;	
  	}
  
  	@Override
@@ -77,7 +80,7 @@ public class PlatformDaoImp implements PlatformDao {
  			Integer pointsFrom, Integer pointsToMin) {
  			List<Offer> list = new ArrayList<Offer>(); 
  			String hql = "from Offer where pointsFrom>= :pointsToMin and pointsToMin<= :pointsFrom "
- 					+ "and sellerFrom =:sellerTo and sellerTo =:sellerFrom and status= :2";
+ 					+ "and sellerFrom =:sellerTo and sellerTo =:sellerFrom and status= :1";
  			Query query = getSession().createQuery(hql);
  			query.setInteger("sellerFrom", sellerFrom);
  			query.setInteger("sellerTo", sellerTo);
@@ -86,7 +89,7 @@ public class PlatformDaoImp implements PlatformDao {
  			Offer offer = (Offer) query.uniqueResult();
  			list.add(offer);
  			return list;
- 		}
+ 	}
 	
 	@Override	
 	public Boolean removeExchange(String request_id, String user_from)
