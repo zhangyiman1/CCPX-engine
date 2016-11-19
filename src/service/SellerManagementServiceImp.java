@@ -72,7 +72,15 @@ public class SellerManagementServiceImp implements SellerManagementService {
 		// TODO Auto-generated method stub
 		return sellerManagementDaoImp.getSellerById(Seller_id);
 	}
-
-
+	
+	@Override
+	public boolean checkActivationCode(String code, String sellerid){
+		return sellerManagementDaoImp.checkActivationCode(code,sellerid);
+	}
+	
+	@Override
+	public boolean updateSellerStatus(String sellerid){
+		return sellerManagementDaoImp.updateSellerStatus(sellerid);
+	}
 
 }

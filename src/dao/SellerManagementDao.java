@@ -20,4 +20,8 @@ public interface SellerManagementDao {
 	boolean updatePhone(int Seller_id, String Seller_Telephone);
 	
 	public seller getSellerById(int Seller_id);	
+	
+	public boolean checkActivationCode(String code, String sellerid);
+	
+	public boolean updateSellerStatus(String sellerid);
 }

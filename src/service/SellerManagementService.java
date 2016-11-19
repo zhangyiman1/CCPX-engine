@@ -19,4 +19,8 @@ public interface SellerManagementService {
 	public boolean regist(seller seller);
 	
 	public seller getSellerById(int Seller_id);
+	
+	public boolean checkActivationCode(String code, String sellerid);
+	
+	public boolean updateSellerStatus(String sellerid);
 }
