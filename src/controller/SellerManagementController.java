@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import javax.annotation.Resource;
 import javax.servlet.ServletOutputStream;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import model.seller;
@@ -49,11 +50,14 @@ public class SellerManagementController {
 	        
 			if (Seller != null) {
 				//req.getSession().setAttribute("Seller", Seller);
-		        String message = "{'message':'success'}";  
-		        JSONObject json = JSONObject.fromObject(message);
+				//Cookie cookie=new Cookie("sellerid",String.valueOf(Seller.getSeller_id()));
+				//res.addCookie(cookie); {'message':'success','sellerid':'sellerid','sellername':'sellername'}
+		        String sellerid = String.valueOf(Seller.getSeller_id());
+		        String sellername = Seller.getSeller_Name();
+		        String message = "{'message':'success','sellerid':'"+sellerid+"','sellername':'"+sellername+"'}";
+		        JSONObject json = JSONObject.fromObject(message);      
 		        System.out.print(json);
 		        System.out.close();
-		        
 		        try{
 		        out = res.getWriter();
 		        out.write(json.toString());
@@ -70,6 +74,75 @@ public class SellerManagementController {
 				
 			} else {
 		        String message = "{'message':'username or password is not correct'}";  
+		        JSONObject json = JSONObject.fromObject(message);
+		        System.out.print(json);
+		        System.out.close();
+		        try{
+		        out = res.getWriter();
+		        out.write(json.toString());
+		        out.flush();
+		        out.close();
+		        }catch (IOException e) {  
+		            e.printStackTrace();  
+		        } finally {  
+		            if (out != null) {  
+		                out.close();  
+		            } 
+		        } 
+			}
+
+	}
+	
+	@RequestMapping("checkActivationCode")
+	@ResponseBody
+	public void checkActivationCode(HttpServletRequest req, HttpServletResponse res,
+			String code, String sellerid) {
+			boolean b = sellerManagementServiceImp.checkActivationCode(code,sellerid);
+			res.setCharacterEncoding("UTF-8"); 
+	        res.setContentType("text/json");
+	        PrintWriter out =null;
+			if (b) {
+				//修改Seller Status
+				boolean r = sellerManagementServiceImp.updateSellerStatus(sellerid);
+				
+				if(r){
+		        String message = "{'message':'success'}";	        
+		        JSONObject json = JSONObject.fromObject(message);      
+		        System.out.print(json);
+		        System.out.close();
+		        try{
+		        out = res.getWriter();
+		        out.write(json.toString());
+		        out.flush();
+		        out.close();
+		        }catch (IOException e) {  
+		            e.printStackTrace();  
+		        } finally {  
+		            if (out != null) {  
+		                out.close();  
+		            } 
+		        } 
+				}else{
+					String message = "{'message':'You are already a member'}";  
+			        JSONObject json = JSONObject.fromObject(message);
+			        System.out.print(json);
+			        System.out.close();
+			        try{
+			        out = res.getWriter();
+			        out.write(json.toString());
+			        out.flush();
+			        out.close();
+			        }catch (IOException e) {  
+			            e.printStackTrace();  
+			        } finally {  
+			            if (out != null) {  
+			                out.close();  
+			            } 
+			        } 
+				}
+				
+			}else {
+		        String message = "{'message':'activation code is not correct'}";  
 		        JSONObject json = JSONObject.fromObject(message);
 		        System.out.print(json);
 		        System.out.close();
@@ -159,6 +232,7 @@ public class SellerManagementController {
 		    Seller.setSeller_Password(seller_Password);
 	     	Seller.setIndustryType_id(industryType_id);
 	    	Seller.setSeller_Description(seller_Description);
+	    	Seller.setSeller_Status("0");
 		    PrintWriter out =null;
 	     	res.setCharacterEncoding("UTF-8"); 
             res.setContentType("text/json");
@@ -168,29 +242,91 @@ public class SellerManagementController {
 	        String fileName = Logo.getOriginalFilename();
 	        type=fileName.indexOf(".")!=-1?fileName.substring(fileName.lastIndexOf(".")+1, fileName.length()):null;
 	        
-	                String realPath=req.getSession().getServletContext().getRealPath("/")+"images\\";
-	                String trueFileName=seller_Username+"."+type;
-	                path=realPath+trueFileName;
-	                System.out.println("存放图片文件的路径:"+path);
-	                try{
-	                Logo.transferTo(new File(path));}
-	                catch (IOException e) {  
-       		            e.printStackTrace();  
-       		        } finally {  
-       		        } 
-	                
-	                Seller.setSeller_Logo("images\\"+trueFileName);
-	                boolean b = sellerManagementServiceImp.regist(Seller);
-	                
-	                
-	           		if (b) {
-	           			    String message = "{'message':'success'}";  
-	           		        JSONObject json = JSONObject.fromObject(message);
-	           		        System.out.print(json);
-	           		        System.out.close();
+
+	                if (Logo.getSize()<2000000) {
+	                	 type=fileName.indexOf(".")!=-1?fileName.substring(fileName.lastIndexOf(".")+1, fileName.length()):null;
+	                	 if (type!=null) {
+	                		 if ("PNG".equals(type.toUpperCase())||"JPG".equals(type.toUpperCase())) {//图片格式正确，执行regist操作
+	                			String realPath=req.getSession().getServletContext().getRealPath("/")+"images\\";
+	     		                String trueFileName=seller_Username+"."+type;
+	     		                path=realPath+trueFileName;
+	     		                System.out.println("存放图片文件的路径:"+path);
+	     		                try{
+	     		                Logo.transferTo(new File(path));}
+	     		                catch (IOException e) {  
+	     	       		            e.printStackTrace();  
+	     	       		        } finally {  
+	     	       		        } 
+	     		                Seller.setSeller_Logo("images\\"+trueFileName);
+	     		                boolean b = sellerManagementServiceImp.regist(Seller);
+	     		               if (b) {
+	   	           			    String message = "success";
+	   	           		        try{
+	   	           		        out = res.getWriter();
+	   	           		        out.write(message);
+	   	           		        out.flush();
+	   	           		        out.close();
+	   	           		        }catch (IOException e) {  
+	   	           		            e.printStackTrace();  
+	   	           		        } finally {  
+	   	           		            if (out != null) {  
+	   	           		                out.close();  
+	   	           		            } 
+	   	           		        } 
+	   	           		        
+	   	           		} else {
+	   	           			    String message = "false_exception";  
+	   	           		        try{
+	   	           		        out = res.getWriter();
+	   	           		        out.write(message);
+	   	           		        out.flush();
+	   	           		        out.close();
+	   	           		        }catch (IOException e) {  
+	   	           		            e.printStackTrace();  
+	   	           		        } finally {  
+	   	           		            if (out != null) {  
+	   	           		                out.close();  
+	   	           		            }//if 
+	   	           		        } //finally
+	   	           		}//else
+	                		 }//图片格式正确，执行regist操作
+	                		 else{//图片格式不正确
+	                			    String message = "false_format_not_correct";  
+		   	           		        try{
+		   	           		        out = res.getWriter();
+		   	           		        out.write(message);
+		   	           		        out.flush();
+		   	           		        out.close();
+		   	           		        }catch (IOException e) {  
+		   	           		            e.printStackTrace();  
+		   	           		        } finally {  
+		   	           		            if (out != null) {  
+		   	           		                out.close();  
+		   	           		            }//if 
+		   	           		        } //finally
+	                		 }//图片格式不正确
+	                	 }//type!=null
+	                	 else{//type==null
+	                		 String message = "false_type_null";  
+	   	           		        try{
+	   	           		        out = res.getWriter();
+	   	           		        out.write(message);
+	   	           		        out.flush();
+	   	           		        out.close();
+	   	           		        }catch (IOException e) {  
+	   	           		            e.printStackTrace();  
+	   	           		        } finally {  
+	   	           		            if (out != null) {  
+	   	           		                out.close();  
+	   	           		            }//if 
+	   	           		        } //finally
+	                	 }//type!==null
+	                }
+	                else{//Logo.getSize()>2000000
+	                	String message = "false_size_too_big";  
 	           		        try{
 	           		        out = res.getWriter();
-	           		        out.write(json.toString());
+	           		        out.write(message);
 	           		        out.flush();
 	           		        out.close();
 	           		        }catch (IOException e) {  
@@ -198,30 +334,16 @@ public class SellerManagementController {
 	           		        } finally {  
 	           		            if (out != null) {  
 	           		                out.close();  
-	           		            } 
-	           		        } 
-	           		        
-	           		} else {
-	           			 String message = "{'message':'false'}";  
-	           		        JSONObject json = JSONObject.fromObject(message);
-	           		        System.out.print(json);
-	           		        System.out.close();
-	           		        try{
-	           		        out = res.getWriter();
-	           		        out.write(json.toString());
-	           		        out.flush();
-	           		        out.close();
-	           		        }catch (IOException e) {  
-	           		            e.printStackTrace();  
-	           		        } finally {  
-	           		            if (out != null) {  
-	           		                out.close();  
-	           		            } 
-	           		        } 
-	           		}
-	           		
-	      //      }
-	     //   }
+	           		            }//if 
+	           		        } //finally
+	                }//Logo.getSize()>2000000
+		               
+	                	
+	                	
+	                	
+	                	
+	                	
+	                	
 		
 		
 	}
