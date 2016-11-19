@@ -199,6 +199,8 @@ jQuery.extend({
     uploadHttpData: function( r, type ) {
         var data = !type;
         data = type == "xml" || data ? r.responseXML : r.responseText;
+        data = data.replace("<pre style=\"word-wrap: break-word; white-space: pre-wrap;\">","");
+        data = data.replace("</pre>","");
         // If the type is "script", eval it in global context
         if ( type == "script" )
             jQuery.globalEval( data );
@@ -206,14 +208,16 @@ jQuery.extend({
         if ( type == "json" )
         {
             // If you add mimetype in your response,
-            // you have to delete the '<pre></pre>' tag.
+            // you have to delete the '<pre></pre>' tag.草泥马坑爹啊
             // The pre tag in Chrome has attribute, so have to use regex to remove
-            var data = r.responseText;
-            var rx = new RegExp("<pre.*?>(.*?)</pre>","i");
-            var am = rx.exec(data);
+            //var data = r.responseText;
+        	var data2 =new Array();
+        	data2 = data.split('{');
+            //var rx = new RegExp("<pre.*?>(.*?)</pre>","i");
+            //var am = rx.exec(data);
             //this is the desired data extracted
-            var data = (am) ? am[1] : "";    //the only submatch or empty
-            eval( "data = " + data );
+            //var data = (am) ? am[1] : "";    //the only submatch or empty
+            eval( "data = " + data2[0]+'}' );
         }
         // evaluate scripts within html
         if ( type == "html" )
