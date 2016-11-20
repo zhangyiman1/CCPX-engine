@@ -104,6 +104,36 @@ public class OfferDaoImpl implements OfferDao{
 			return (ArrayList<Offer>) list;
 			
 		}
+	public String making_an_offer(Offer offer) throws SQLException {
+		Connection conn = null;
+		PreparedStatement ps = null;
+		
+		
+		String sql = "insert into Offer(user_id,seller_from, seller_to, points_from, points_to_min,status)"
+				+ " values(?,?,?,?,?,?)";
+		try {
+			conn = JdbcUtils_C3P0.getConnection();
+			ps = conn.prepareStatement(sql);
+			//ps.setInt(1, user.getId());
+			ps.setInt(1, offer.getUser_id());
+			ps.setInt(2, offer.getSeller_from());
+			ps.setInt(3, offer.getSeller_to());
+			ps.setInt(4, offer.getPoints_from());
+			ps.setInt(5, offer.getPoints_to_min());
+			ps.setString(6, offer.getStatus());
+			ps.executeUpdate();
+			return "ok";
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return "error";
+			//throw new SQLException("增加请求失败");
+			
+		} finally {
+			JdbcUtils_C3P0.release(conn, ps, null);
+		}
+		
+	}
 }
 
 

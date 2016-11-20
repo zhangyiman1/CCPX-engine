@@ -81,7 +81,7 @@ public class UserDaoImpl implements UserDao{
 	public void update(User user) throws SQLException {
 		Connection conn = null;
 		PreparedStatement ps = null;
-		String sql = "update user set u_wechat_id=?,u_name=?,u_email_address=?,u_full_name=? where id=?";
+		String sql = "update user set u_wechat_id=?,u_name=?,u_email_address=?,u_full_name=? where u_id=?";
 		try {
 			conn = JdbcUtils_C3P0.getConnection();
 			ps = conn.prepareStatement(sql);
@@ -224,16 +224,21 @@ public class UserDaoImpl implements UserDao{
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		int id = 0;
-		String sql = "select u_id from user where u_name=? and u_pw_hash=?";
+		String sql = "select u_id from user where u_name='"+username+"' and u_pw_hash='"+password+"'";
 		try {
+			System.out.println(sql);
 			conn = JdbcUtils_C3P0.getConnection();
 			ps = conn.prepareStatement(sql);
-			ps.setString(1, username);
-			ps.setString(2, password);
+			//ps.setString(1, username);
+			//ps.setString(2, password);
 			rs = ps.executeQuery();
 			if(rs.next()){
-			BigDecimal lastIdBd = rs.getBigDecimal(1);
-		    id = lastIdBd.intValue();}
+				id = rs.getInt(1);
+				//BigDecimal lastIdBd = rs.getBigDecimal(1);
+				//id = lastIdBd.intValue();
+			}else{
+				return 0;
+			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -343,6 +348,7 @@ public class UserDaoImpl implements UserDao{
 				tempOne.setContent(rs.getString(3));
 				tempOne.setStatus(rs.getInt(4));
 				tempOne.setSeen(rs.getInt(5));
+				tempOne.setExchId(rs.getInt(6));
 				SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:SS");  
 				//String str=sdf.format(date);  
 				tempOne.setNotiDate(sdf.format(rs.getDate(6)));
