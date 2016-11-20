@@ -9,6 +9,19 @@ public class Offer {
 	int points_to_min;
 	String status;
 	
+	public Offer() {
+		super();
+	}
+	public Offer(int user_id, int seller_from, int seller_to, int points_from,
+			int points_to_min, String status) {
+		super();
+		this.user_id = user_id;
+		this.seller_from = seller_from;
+		this.seller_to = seller_to;
+		this.points_from = points_from;
+		this.points_to_min = points_to_min;
+		this.status = status;
+	}
 	
 	public int getOffer_id() {
 		return offer_id;
@@ -52,4 +65,7 @@ public class Offer {
 	public void setStatus(String status) {
 		this.status= status;
 	}
+	
+	
+
 }

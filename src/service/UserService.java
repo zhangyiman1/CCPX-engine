@@ -6,8 +6,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javassist.expr.NewArray;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -17,6 +15,7 @@ import model.Record;
 import model.Request;
 import model.User;
 import model.Response;
+import model.user_to_seller;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -28,6 +27,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import dao.OfferDaoImpl;
 import dao.RecordDaoImpl;
 import dao.UserDaoImpl;
+import dao.User_to_SellerDaoImpl;
 import utils.UserCommonUtil;
 import utils.MD5Util;
 
@@ -135,13 +135,16 @@ public class UserService {
     public void modify(HttpServletRequest request,HttpServletResponse response) throws IOException, SQLException{
         response.setCharacterEncoding("UTF-8"); 
         response.setContentType("text/json");
-        int id = Integer.valueOf(request.getParameter("id"));
-        String name = request.getParameter("name");
-        String fullname = request.getParameter("fullname");
-        String email = request.getParameter("email");
-        String wechat = request.getParameter("wechat");
+        int id = Integer.valueOf(request.getParameter("u_id"));
+        String token = request.getParameter("u_token");
+        String name = request.getParameter("u_name");
+        String fullname = request.getParameter("u_full_name");
+        String email = request.getParameter("u_email_address");
+        String wechat = request.getParameter("u_wechat_id");
+        check_token(id, token, response);
         User user = new User();
         user.setId(id);
+        user.setToken(token);
         user.setName(name);
         user.setEmail(email);
         user.setFullname(fullname);
@@ -149,8 +152,8 @@ public class UserService {
         UserDaoImpl impl = new UserDaoImpl();
         impl.update(user);
     	PrintWriter out = response.getWriter();
-        String message = "{'message':'success'}";  
-        JSONObject json = JSONObject.fromObject( message );
+    	Response res = new Response(0, "", user);
+        JSONObject json = JSONObject.fromObject(res);
         out.print(json);
         out.close();
     }
@@ -246,7 +249,6 @@ public class UserService {
          
          JSONArray jsonArr = new JSONArray();//json格式的数组  
          JSONObject jsonObjArr = new JSONObject(); 
-         JSONObject json1 = new JSONObject();
          Record record=new Record();
           for(int i=0;i<records.size();i++){
         	  record=records.get(i);
@@ -265,8 +267,7 @@ public class UserService {
           }
           json.put("errno", 0);
           json.put("err", 	"");
-          json1.put("record_list", jsonArr);
-          json.put("rsm", json1);
+          json.put("rsm", jsonArr);
           out.print(json);
           System.out.println(json.toString());
           out.close();
@@ -282,7 +283,7 @@ public class UserService {
          List<Offer>offers=new ArrayList<Offer>();
        
          try {
-        	 if (size==4) {
+        	 if (size>=4) {
         		 int seller_from=Integer.parseInt(request.getParameter("seller_from"));
                  int seller_to =Integer.parseInt(request.getParameter("seller_to"));
                  int points_from=Integer.parseInt(request.getParameter("points_from"));
@@ -330,5 +331,61 @@ public class UserService {
           System.out.println(json.toString());
           out.close();
     }
-  
+    @RequestMapping(value = "/makingoffer", method = RequestMethod.POST)  
+    @ResponseBody
+    public void makingOffer(HttpServletRequest request,HttpServletResponse response) throws IOException{
+    	response.setCharacterEncoding("UTF-8"); 
+        response.setContentType("text/json");
+        OfferDaoImpl offerDaoImpl=new OfferDaoImpl();
+      
+        try {
+       		 int user_id=Integer.parseInt(request.getParameter("user_id"));
+       		 int seller_from=Integer.parseInt(request.getParameter("seller_from"));
+                int seller_to =Integer.parseInt(request.getParameter("seller_to"));
+                int points_from=Integer.parseInt(request.getParameter("points_from"));
+                int points_to_min=Integer.parseInt(request.getParameter("points_to_min"));
+                System.out.println(user_id);
+                String status="1";
+                Offer offer1=new Offer(user_id,seller_from,seller_to,points_from,points_to_min,status);
+       		    System.out.println(offerDaoImpl.making_an_offer(offer1));
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        //System.out.println(records.size());
+        PrintWriter out = response.getWriter();
+       
+        
+        JSONObject json = new JSONObject();
+        
+       
+        JSONObject json1 = new JSONObject();
+        //System.out.println(offers.size());
+        
+         json.put("errno", 0);
+         json.put("err", 	"");
+         json1.put("status", "OK");
+         json.put("rsm", json1);
+         out.print(json);
+         System.out.println(json.toString());
+         out.close();
+   }
+    @RequestMapping(value = "/view_points", method = RequestMethod.GET)  
+    @ResponseBody
+    public void viewPoints(HttpServletRequest request,HttpServletResponse response) throws IOException, SQLException{
+    	response.setCharacterEncoding("UTF-8"); 
+        response.setContentType("text/json");
+        int id = Integer.parseInt(request.getParameter("u_id"));
+        String token = request.getParameter("u_token");
+        check_token(id, token, response);
+        User_to_SellerDaoImpl impl = new User_to_SellerDaoImpl();
+        ArrayList<user_to_seller> list = impl.queryPoints(id);
+        PrintWriter out = response.getWriter();
+        JSONArray result = JSONArray.fromObject(list);
+        Response rs = new Response(0, "", result);
+        JSONObject json = JSONObject.fromObject(rs);
+        out.print(json);
+        out.close();
+    }
 }  

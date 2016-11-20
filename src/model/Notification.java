@@ -7,6 +7,7 @@ public class Notification {
 	int status;
 	int seen;
 	String notiDate;
+	int exchId;
 	public int getNotifiId() {
 		return notifiId;
 	}
@@ -42,6 +43,12 @@ public class Notification {
 	}
 	public void setNotiDate(String notiDate) {
 		this.notiDate = notiDate;
+	}
+	public int getExchId() {
+		return exchId;
+	}
+	public void setExchId(int exchId) {
+		this.exchId = exchId;
 	}
 	
 	

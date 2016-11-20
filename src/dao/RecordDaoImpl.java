@@ -61,5 +61,6 @@ public class RecordDaoImpl implements RecordDao{
 		return (ArrayList<Record>) list;
 		
 	}
+	
 
 }
