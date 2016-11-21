@@ -5,9 +5,6 @@
 <hibernate-mapping>
  <class name="model.Offer" table="Offer">
   <id length="11" name="OFFER_ID" type="int">
-  <property name="offerID" type="int">
-   <column name="OFFER_ID"/>
-  </property>
   </id>
   <property name="userID" type="int">
    <column name="USER_ID"/>
