@@ -4,14 +4,7 @@
 <!-- Generated 2015-1-7 21:46:33 by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
  <class name="model.Offer" table="Offer">
-  <id length="11" name="OFFER_ID" type="int">
-<<<<<<< HEAD
-=======
-  <property name="offerID" type="int">
-   <column name="OFFER_ID"/>
-  </property>
->>>>>>> parent of b47fa2a... 王夏菁的提交
-  </id>
+  <id length="11" name="OFFER_ID" type="int"/>
   <property name="userID" type="int">
    <column name="USER_ID"/>
   </property>
