@@ -68,5 +68,12 @@ public class PlatformServiceImp implements PlatformService {
 		Boolean flag = PlatformDaoImp.updateRequestStatus(request_id, user_from);
 		System.out.println("flag: " + flag);
 		return flag;
+
+	}
+
+	@Override
+	public Boolean acceptRequest(int requestID) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

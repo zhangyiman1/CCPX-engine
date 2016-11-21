@@ -91,8 +91,9 @@ public class PlatformDaoImp implements PlatformDao {
 		return list;
 	}
 
-	@Override
-	public Boolean removeExchange(Integer request_id, Integer user_from) {
+	@Override	
+	public Boolean removeExchange(Integer request_id, Integer user_from)
+	{
 		System.out.println("PlatformDaoImp");
 		System.out.println("request_id: " + request_id);
 		System.out.println("user_from: " + user_from);
@@ -137,6 +138,7 @@ public class PlatformDaoImp implements PlatformDao {
 		System.out.println("offer_id: " + offer_id);
 		System.out.println("user_id: " + user_id);
 		// status 3= removed status 1=avalaible 2=done
+
 		String hql = "update Offer set  STATUS=:STATUS where OFFER_ID=:OFFER_ID and USER_ID=:USER_ID";
 		Query query = getSession().createQuery(hql);
 		query.setInteger("OFFER_ID", offer_id);
@@ -183,4 +185,11 @@ public class PlatformDaoImp implements PlatformDao {
 		return (a > 0 ? true : false);
 	}
 
+
+
+	@Override
+	public Boolean acceptRequest(Integer request_id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

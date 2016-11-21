@@ -5,6 +5,12 @@
 <hibernate-mapping>
  <class name="model.Offer" table="Offer">
   <id length="11" name="OFFER_ID" type="int">
+<<<<<<< HEAD
+=======
+  <property name="offerID" type="int">
+   <column name="OFFER_ID"/>
+  </property>
+>>>>>>> parent of b47fa2a... 王夏菁的提交
   </id>
   <property name="userID" type="int">
    <column name="USER_ID"/>
