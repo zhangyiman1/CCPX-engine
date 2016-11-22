@@ -23,8 +23,11 @@
     <property name="pointsTo" type="int">
    <column name="pointsTo"/>
   </property>
-    <property name="offerId" type="int">
-   <column name="offerId"/>
+  <property name="offerFrom" type="int">
+   <column name="offerFrom"/>
+  </property>
+   <property name="offerTo" type="int">
+   <column name="offerTo"/>
   </property>
   <property generated="never" lazy="false" name="userNameFrom" type="java.lang.String">
    <column name="userNameFrom"/>
