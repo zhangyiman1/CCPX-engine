@@ -24,7 +24,7 @@ public interface PlatformService {
 
 	public Boolean updateRequestStatus(Integer request_id, Integer user_from);
 
-	public Boolean acceptRequest(int requestID);
+	public Boolean acceptRequest(Integer request_id);
 
 
 	
