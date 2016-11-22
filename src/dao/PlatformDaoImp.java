@@ -188,8 +188,18 @@ public class PlatformDaoImp implements PlatformDao {
 
 
 	@Override
-	public Boolean acceptRequest(Integer request_id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+ 	public Boolean acceptRequest(Integer request_id){
+ 		String hql = "update Request set status=:status where Rid=:Rid";
+ 		Query query = getSession().createQuery(hql);
+ 		query.setInteger("status", 1);
+ 		query.setInteger("Rid", request_id);
+ 		int a = query.executeUpdate();
+ 		if(a > 0){
+ 			System.out.println("request has been accepted");
+ 		}
+ 		else{
+ 			System.out.println("request acceptting is failed");
+ 		}
+ 		return a > 0 ? true : false;
+ 	}
 }
