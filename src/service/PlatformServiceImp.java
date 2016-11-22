@@ -71,8 +71,9 @@ public class PlatformServiceImp implements PlatformService {
 
 	}
 
+	
 	@Override
-	public Boolean acceptRequest(int requestID) {
+	public Boolean acceptRequest(Integer request_id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
