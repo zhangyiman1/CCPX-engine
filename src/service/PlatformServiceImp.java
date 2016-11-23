@@ -71,10 +71,11 @@ public class PlatformServiceImp implements PlatformService {
 
 	}
 
-	
 	@Override
-	public Boolean acceptRequest(Integer request_id) {
-		// TODO Auto-generated method stub
-		return null;
+	public Boolean acceptRequest(Integer request_id)
+	{
+		Boolean flag = PlatformDaoImp.acceptRequest(request_id);
+		System.out.println("flag: " + flag);
+		return flag;	
 	}
 }
