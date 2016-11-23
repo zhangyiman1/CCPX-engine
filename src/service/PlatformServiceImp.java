@@ -72,10 +72,29 @@ public class PlatformServiceImp implements PlatformService {
 	}
 
 	@Override
-	public Boolean acceptRequest(Integer request_id)
-	{
-		Boolean flag = PlatformDaoImp.acceptRequest(request_id);
-		System.out.println("flag: " + flag);
-		return flag;	
+	public Boolean acceptRequest(Integer request_id) {
+		Request request = new Request();
+		Integer UserFrom = request.getUserFrom();
+		Integer UserTo = request.getUserTo();
+		Integer PointsFrom = request.getPointsFrom();
+		Integer PointsTo = request.getPointsTo();
+		Integer SellerFrom = request.getSellerFrom();
+		Integer SellerTo = request.getSellerTo();
+		Integer OfferFrom = request.getOfferFrom();
+		Integer OfferTo = request.getOfferTo();
+		request = PlatformDaoImp.requestData(request_id);
+		// Boolean success = PlatformDaoImp.sendExchangeToBC(Integer request_id,
+		// Integer UserFrom, Integer UserTo,
+		// Integer PointsFrom, Integer PointsTo, Integer SellerFrom, Integer
+		// SellerTo);
+		Boolean success = true;
+		// call notification notifi(OfferFrom) notifi(OfferTo) notifi(UserFrom)
+		// notifi(UserTo)
+		Boolean acc = PlatformDaoImp.acceptRequest(request_id, OfferFrom, OfferTo);
+		List<Integer> requestList = PlatformDaoImp.listOfRequest(OfferFrom, OfferTo);
+		requestList.remove(request_id);
+
+		return null;
+
 	}
 }
