@@ -20,7 +20,7 @@
   <property name="pointsToMin" type="int">
    <column name="POINTS_TO_MIN"/>
   </property>
-  <property name="status" type="varchar">
+  <property name="status" type="java.lang.String">
    <column name="STATUS"/>
  </property>
  </class>
