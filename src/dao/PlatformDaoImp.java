@@ -171,6 +171,7 @@ public class PlatformDaoImp implements PlatformDao {
 	}
 
 	@Override
+	//Update all of related request status
 	public Boolean updateRequestStatus(Integer request_id, Integer user_from) {
 		String sql = "update Request set  status=:status where Rid=:Rid and userTo=:userTo";
 		Query query = getSession().createQuery(sql);
@@ -187,17 +188,88 @@ public class PlatformDaoImp implements PlatformDao {
 	}
 
 	@Override
-	public Boolean acceptRequest(Integer request_id) {
+	public Boolean acceptRequest(Integer request_id, Integer OfferFrom, Integer OfferTo) {
+		// Update 1 request and two offers status
 		String hql = "update Request set status=:status where Rid=:Rid";
 		Query query = getSession().createQuery(hql);
 		query.setString("status", "CLOSED");
 		query.setInteger("Rid", request_id);
+		Boolean rr = null;
 		int a = query.executeUpdate();
-		if (a > 0) {
-			System.out.println("request has been accepted");
-		} else {
-			System.out.println("request acceptting is failed");
+		int b = 0;
+		if (OfferFrom != null) {
+			String sql1 = "update Offer set  STATUS=:STATUS where OFFER_ID=:OFFER_ID1";
+			Query query1 = getSession().createQuery(sql1);
+			query1.setInteger("OFFER_ID1", OfferFrom);
+			query1.setString("STATUS", "CLOSED");
+			b = query1.executeUpdate();
 		}
-		return a > 0 ? true : false;
+		String sql2 = "update Offer set  STATUS=:STATUS where OFFER_ID=:OFFER_ID2";
+		Query query2 = getSession().createQuery(sql2);
+		query2.setInteger("OFFER_ID2", OfferTo);
+		query2.setString("STATUS", "CLOSED");
+		int c = query2.executeUpdate();
+
+		if (OfferFrom != null) {
+			if (a > 0 & b > 0 & c > 0) {
+				System.out.println("request has been accepted");
+				rr = true;
+			} else {
+				System.out.println("request acceptting is failed");
+				rr = false;
+			}
+
+		} else {
+			if (a > 0 & c > 0) {
+				System.out.println("request has been accepted");
+				rr = true;
+			} else {
+				System.out.println("request acceptting is failed");
+				rr = false;
+			}
+		}
+		return rr;
+
 	}
+
+	@Override
+	public Request requestData(Integer request_id) {
+		// TODO Auto-generated method stub
+		String sql = "from Request where request_id:Rid";
+		Query query = getSession().createQuery(sql);
+		query.setInteger("Rid", request_id);
+		Request request = (Request) query.uniqueResult();
+		return request;
+
+	}
+
+	@Override
+	public List<Integer> listOfRequest(Integer OfferFrom, Integer OfferTo) {
+		List<Integer> requests;
+		// OfferFrom is not null means userFrom found offer from make offer recommendation
+		// here we select all of exchange request sent to OfferTo and OfferFrom
+		if (OfferFrom != null) {
+			String sql = "SELECT E.Rid from Request E where " + "(offerTo =? OR offerTo =? OR offerFrom=? OR offerFrom=?)";
+			Query query = getSession().createQuery(sql);
+			query.setInteger(0, OfferFrom);
+			query.setInteger(1, OfferTo);
+			query.setInteger(2, OfferFrom);
+			query.setInteger(3, OfferTo);
+			System.out.println(query.list());
+			requests = query.list();
+
+		} else {
+			// OfferFrom is null means userFrom found offer from searchExchange
+			// here we select all of exchange request sent to OfferTo 
+			String sql = "SELECT E.Rid from Request E where " + "offerTo =? OR offerFrom=?";
+			Query query = getSession().createQuery(sql);
+			query.setInteger(0, OfferTo);
+			query.setInteger(1, OfferTo);
+			System.out.println(query.list());
+			requests = query.list();
+		}
+
+		return requests;
+	}
+
 }
