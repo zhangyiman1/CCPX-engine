@@ -286,8 +286,8 @@ public class UserDaoImpl implements UserDao{
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		String sql = "SELECT r_id,U_ID_FROM,U_ID_TO,request.POINTS_FROM,request.POINTS_TO,request.STATUS,request.UPDATE_TIME, "
-					+"a.u_name AS userNameFrom,U_ID_TO,b.u_name AS userNameTo, "
-					+"sa.Seller_Name AS sellerNameFrom,sb.Seller_Name AS sellerNameTo FROM `request` " 
+					+"a.u_name AS userNameFrom,b.u_name AS userNameTo, "
+					+"sa.Seller_Name AS sellerNameFrom,sb.Seller_Name AS sellerNameTo , request.offer_from, request.offer_to FROM `request` " 
 					+"LEFT JOIN user a ON request.U_ID_FROM = a.u_id "
 					+"LEFT JOIN user b on request.U_ID_TO = b.u_id "
 					+"LEFT JOIN seller sa on request.SELLER_ID_FROM = sa.Seller_id "
@@ -314,6 +314,8 @@ public class UserDaoImpl implements UserDao{
 				tempOne.setUserNameTo(rs.getString(9));
 				tempOne.setSellerNameFrom(rs.getString(10));
 				tempOne.setSellerNameTo(rs.getString(11));
+				tempOne.setOfferFrom(rs.getInt(12));
+				tempOne.setOfferTo(rs.getInt(13));
 				result.add(tempOne);
 		    }
 			return result;
@@ -388,6 +390,35 @@ public class UserDaoImpl implements UserDao{
 		}
 	}
 	
-
-	
+	public User get_profile(String id, String token)throws SQLException {
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		User user = null;
+		String sql = "select u_wechat_id,u_name,u_email_address,u_full_name,u_token,u_id from user where u_id=? and u_token = ?";
+		try {
+			conn = JdbcUtils_C3P0.getConnection();
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, id);
+			ps.setString(2, token);
+			rs = ps.executeQuery();
+			while(rs.next()){
+			    user = new User();
+				user.setId(rs.getInt(6));
+				user.setWechatid(rs.getString(1));
+				user.setName(rs.getString(2));
+				user.setEmail(rs.getString(3));
+				//user.setPassword(rs.getString(4));
+				user.setFullname(rs.getString(4));
+				user.setToken(rs.getString(5));
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			JdbcUtils_C3P0.release(conn, ps, null);
+		}
+		return user;
+	}
 }
