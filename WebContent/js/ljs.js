@@ -69,12 +69,10 @@ $.ajax({
 		if(data.message == "exist") {
 			$("#usernameError").text("Username already exist!");
 			document.getElementById("usernameError").style.color="Red";
-			showError($("#usernameError"));
 			return false;
 		}else{
 			$("#usernameError").text("User name available.");
 			document.getElementById("usernameError").style.color="Green";
-			showError($("#usernameError"));
 			return true;
 		}
 	}
@@ -82,13 +80,23 @@ $.ajax({
 		 }
 }
 
+ 
+
+ 
+ 
 function TipForUsername(){
 $("#usernameError").text("Input username.");
 document.getElementById("usernameError").style.color="Black";
-showError($("#usernameError"));
 }
 
-
+function getValidateResult(){
+	var result = document.getElementById("usernameError");
+	if(result=="User name available."){
+		return true;
+	}else{
+		return false;
+	}
+	}
 
 function searchByKey(x)
 {
@@ -155,6 +163,115 @@ function registSeller() {
             	}
         });
     }
+
+function checkSeller() {
+ var uname=document.getElementById("ID").value;  // 找到元素
+ var passwd=document.getElementById("password").value;  // 找到元素
+ if (uname == "") {
+     alert("Username cannot be empty");
+     return false;
+ }
+ else if (passwd == "") {
+     alert("Password cannot be empty");
+     return false;
+ }
+ else {
+     $.ajax({
+         type: "POST",
+         dataType:"JSON",
+         url: "seller/checkSeller",
+         async: false,
+         data: { username: uname,
+             password: passwd
+         },
+         success: function (data) {
+             if (data.message == "success") {
+                 setCookie("sellerid",data.sellerid);
+                 setCookie("sellername",data.sellername);
+                 location.href="HomePageSeller.html";
+                 //location.href="ListOfSellersPage.jsp";
+             }
+             else{
+             alert(data.message);
+             return false;
+             }
+         }
+     });
+ }
+ } 
+
+function getAd() {
+    $.ajax({
+        type: "POST",
+        dataType:"JSON",
+        url: "ad/getAd",
+        async: false,
+        success: function (data) {
+        $.each(data, function (index, val) {
+       	 if(index==0){
+        $("#ad_presentation").append("<div class='item active'><img class='center-block' alt='Enter company' src='"+val.advertisement_Image+"'/><div class='carousel-caption'><h4>"+val.seller_name+"</h4><p>"+val.seller_Description+"</p></div></div>");
+       	 }else{
+       		 $("#ad_presentation").append("<div class='item'><img class='center-block' alt='Enter company' src='"+val.advertisement_Image+"'/><div class='carousel-caption'><h4>"+val.seller_name+"</h4><p>"+val.seller_Description+"</p></div></div>");
+       	 }
+        });
+        return true;
+        }     
+    });
+}
+
+function getCompanyDetail(id) {
+    $.ajax({
+        type: "POST",
+        dataType:"JSON",
+        url: "info/getCompanyDetail",
+        async: false,
+        data: { id: id
+        },
+        success: function (data) {
+       	 if(data.message=="success"){
+       		 location.href="CompanyPresentation.html";
+       	 }
+       	 else{
+       		 alert("system exception!");
+       	 }
+        }     
+    });
+}
+
+
+function getSellerInfoByID(id) {
+    $.ajax({
+        type: "POST",
+        dataType:"JSON",
+        url: "info/getSellerInfoByIndustryID",
+        async: false,
+        data: { id: id
+        },
+        success: function (data) {
+        var i;
+        $("#sellerinfo"+id).empty();
+        $.each(data, function (index, val) {
+        $("#sellerinfo"+id).append("<li><a href='javascript:;' onclick='getCompanyDetail("+val.seller_id+")'>"+val.seller_Name+"</a></li>");
+        });
+        return true;
+        }     
+    });
+}
+function getAllInfo() {
+       $.ajax({
+           type: "POST",
+           dataType:"JSON",
+           url: "info/getIndustryInfo",
+           async: false,
+           success: function (data) {
+           $.each(data, function (index, val) {
+           	$("#allInfo").append("<div class='dropdown' ><button onclick='getSellerInfoByID("+val.industry_id+")' class='btn btn-default dropdown-toggle' type='button' id='dropdownMenu"+index+"' data-toggle='dropdown' aria-haspopup='true' aria-expanded='true' style='width: 100%'>"+val.industry_Name+"<span class='caret'></span></button><ul class='dropdown-menu' id='sellerinfo"+val.industry_id+"' aria-labelledby='dropdownMenu"+index+"'></ul></div>");
+           });
+           return true;
+           }     
+       });
+   }
+
 
 function setCookie(name,value)
 {

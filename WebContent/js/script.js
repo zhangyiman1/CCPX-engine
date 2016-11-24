@@ -33,7 +33,6 @@
 		 e.preventDefault();
 	   };
 	 })(), true);
-	 
 	 $scope.validatePassword = function(){
 		var pass1 = document.getElementById("userpassword");
 		var pass2 = document.getElementById("confirmPassword");

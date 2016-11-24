@@ -30,7 +30,7 @@
 				<legend>Seller Registration page</legend>
 			
 				<!-- Navbar --> 
-				<nav class="navbar navbar-default" style="background-image: url('img/blue.png'); background-position : 10% 10%;" role="navigation">
+				<nav class="navbar navbar-default" style="background-image: url('img/red.png'); background-position : 10% 10%;" role="navigation">
 					<div class="container-fluid">  
 						<div class="navbar-header">
 							<button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
@@ -82,44 +82,11 @@
 					</p>
 				</div>
 			</div>
-			
-	<script>
-    function registSeller() {
-        var seller_Name=document.getElementById("seller_Name").value;  
-        var seller_Address=document.getElementById("Address").value;  
-        var seller_Telephone=document.getElementById("Telephone").value;  
-        var seller_Email=document.getElementById("Email").value;  
-        var seller_Username=document.getElementById("username").value;
-        var seller_Password=document.getElementById("password").value;  
-        var industryType_id=document.getElementById("Industry").value; 
-        var seller_Description=document.getElementById("Description").value; 
-            $.ajaxFileUpload({
-                type: "POST",
-                dataType:"JSON",
-                url: "seller/registSeller",
-                secureuri : false,
-                fileElementId : "Logo",
-                async: false,
-                data: {
-                seller_Name:seller_Name,
-                seller_Address:seller_Address,
-                seller_Telephone:seller_Telephone,
-                seller_Email:seller_Email,
-                seller_Username:seller_Username,
-                seller_Password:seller_Password,
-                industryType_id:industryType_id,
-                seller_Description:seller_Description
-                },
-                success: function (data) {//返回数据undefined
-                	location.href="PayMemberFee.html";
-                	}
-            });
-        }
-    </script>	
+				
 		
 <!-- ********************************* ^ here ^ ********************************* -->		
 		
-		<form name="myForm" class="form-horizontal">
+		<form name="myForm" class="form-horizontal" enctype="multipart/form-data">
 		<fieldset ng-controller="RegistrationController">
 	
 			<!-- UserName input-->		
@@ -131,7 +98,7 @@
 					<p class="required" id="usernameError"></p>
 				</div>		
 				<div ng-show="nameNotValid">				
-					<label  style="color:red">Field User Name can not be empty</label>
+					<label  style="color:red" name ="usernameFiled">Field User Name can not be empty</label>
 				</div>
 			</div>
 			
@@ -140,7 +107,7 @@
 				<label class="col-md-5 col-sm-4 col-xs-3 control-label" for="password"> Password*
 				</label>
 				<div class="col-md-2 col-sm-4 col-xs-6">
-					<input id="password" name="password" type="password" placeholder="enter your password" ng-model="userpassword" ng-change="validatePassword()" class="form-control input-sm" required>
+					<input id="userpassword" name="userpassword" type="password" placeholder="enter your password" ng-model="userpassword" ng-change="" class="form-control input-sm" required>
 				</div>								
 			</div>
 			<!-- Confirm password input-->
@@ -243,16 +210,33 @@
 				<label class="col-md-5 col-sm-4 col-xs-3 control-label" for="registerbutton">
 				</label>
 				<div class="col-md-2 col-sm-4 col-xs-6">
-					<button ng-disabled="!myForm.$valid " id="registerbutton" name="registerbutton" onclick="registSeller()" class="btn btn-primary center-block"><span class="glyphicon glyphicon-user"></span> Register</button>
+					<button ng-disabled="!myForm.$valid" id="registerbutton" name="registerbutton" onclick="registSeller()" class="btn btn-primary center-block"><span class="glyphicon glyphicon-user"></span> Register</button>
 				</div>
 			</div>
-			
-			
+
 
 		</fieldset>
 		</form>
 		
 		</div>
+						<!-- Website Logo -->
+				<div class="row">
+					<label class="col-md-5 col-sm-4 col-xs-3 control-label" for="Logo"></label>
+					<div class="col-md-2 col-sm-4 col-xs-6">
+						<img class="img-responsive center-block" src="img/logo.png" width="60%" />
+					</div>
+				</div>
+				
+				<!-- message-->
+				<div class="row">
+					<div class="col-md-4 col-sm-3 col-xs-2">
+					</div>
+					<p class="col-md-4 col-sm-6 col-xs-8" id="message">
+					</p>
+				</div>
+			</div>
+		
+		
 	</body>
   
 </html>
