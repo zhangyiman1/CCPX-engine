@@ -143,17 +143,19 @@ public class PlatformController {
 	 	 
 	 
 	 //------------NOTIFACTION TESTPAGE--------------
-	 @RequestMapping("/create_notification")
-	 private void CreateNotification(HttpServletRequest req,
-			 Integer UserId, Integer Status, Integer ER_ID){
-		 System.out.println(UserId+" "+Status);
-		 
+	 @RequestMapping(value="/create_notification", method = RequestMethod.GET)
+	 public @ResponseBody String CreateNotification(@RequestParam Integer UserId, Integer Status, Integer ER_ID){
+		 System.out.print(UserId);
+		 String msg = null;
 		 Boolean flag = PlatformServiceImp.createNotification(UserId, Status, ER_ID);
 		 if(flag){
 			 System.out.println("NotifFlag: " + flag+" Success!");
+			 msg="success";
 		 }else{
 			 System.out.println("NotifFlag: " + flag+" Failed!");
+			 msg="failed";
 		 }
+		 return msg;
 	 }
 	 
 	 @RequestMapping(value="/notif_list_by_user_id", method = RequestMethod.GET)

@@ -27,19 +27,48 @@
 	
 	<div class="uk-width-medium-1">
 		<H1 class="uk-text-large"><center><strong>NOTIFICATION SERVICES<strong></center></H1>
-		<div id="ctc_notif" style="display:none">
-			<span class="uk-text">You have <span id="notif_count" class="uk-badge uk-badge-warning"></span> notifications</span>
+		
+		<div class="uk-width-medium-1" style="margin-bottom:+50px">
+			<div class="uk-grid" data-uk-grid-margin>
+				<div class="uk-width-medium-1-2">
+					<div class="md-input-wrapper">
+						<input id="uid" class="md-input" placeholder="Type User Id..." style="min-height:40px;background: url(<?php echo base_url()?>/assets/img/md-images/search_icon.png) no-repeat 10px center;border: solid 1px #ccc;padding: 9px 10px 9px 10px; -webkit-transition: all .5s;-moz-transition: all .5s;transition: all .5s;"></input>
+						<span class="md-input-bar"></span>
+					</div>
+				</div>
+				<div class="uk-width-medium-1-2">
+					<div class="md-input-wrapper">
+						<input id="er_id" class="md-input" placeholder="Type Offer / Requests Id..." style="min-height:40px;background: url(<?php echo base_url()?>/assets/img/md-images/search_icon.png) no-repeat 10px center;border: solid 1px #ccc;padding: 9px 10px 9px 10px; -webkit-transition: all .5s;-moz-transition: all .5s;transition: all .5s;"></input>
+						<span class="md-input-bar"></span>
+					</div>
+				</div>
+				<div class="uk-width-medium-1-2">
+					<div class="md-input-wrapper">
+						<input id="stid" class="md-input" placeholder="Type Status..." style="min-height:40px;background: url(<?php echo base_url()?>/assets/img/md-images/search_icon.png) no-repeat 10px center;border: solid 1px #ccc;padding: 9px 10px 9px 10px; -webkit-transition: all .5s;-moz-transition: all .5s;transition: all .5s;"></input>
+						<span class="md-input-bar"></span>
+					</div>
+				</div>
+				<div class="uk-width-medium-1-2"> 
+					<button id="setNotif" title="Create Notificaiton" class="uk-width-medium-1 md-btn md-btn-success">Create Notification</button>
+				</div>
 		</div>
-		<div class="uk-grid" data-uk-grid-margin>
-			<div class="uk-width-medium-1-2">
-				<div class="md-input-wrapper">
-					<input id="uid_text" class="md-input" placeholder="Enter User Id..." style="min-height:40px;background: url(<?php echo base_url()?>/assets/img/md-images/search_icon.png) no-repeat 10px center;border: solid 1px #ccc;padding: 9px 10px 9px 10px; -webkit-transition: all .5s;-moz-transition: all .5s;transition: all .5s;"></input>
-					<span class="md-input-bar"></span>
+		<br/><hr/><br/>
+		<div class="uk-width-medium-1">
+			<div class="uk-grid" data-uk-grid-margin>
+				<div class="uk-width-medium-1-2">
+					<div class="md-input-wrapper">
+						<input id="uid_text" class="md-input" placeholder="Enter User Id..." style="min-height:40px;background: url(<?php echo base_url()?>/assets/img/md-images/search_icon.png) no-repeat 10px center;border: solid 1px #ccc;padding: 9px 10px 9px 10px; -webkit-transition: all .5s;-moz-transition: all .5s;transition: all .5s;"></input>
+						<span class="md-input-bar"></span>
+					</div>
+				</div>
+				<div class="uk-width-medium-1-2">
+					<button id="getNotification" title="get notificaiton" class="uk-width-medium-1 md-btn md-btn-primary">Generate Notification</button>
 				</div>
 			</div>
-			<div class="uk-width-medium-1-2">
-				<button id="getNotification" title="get notificaiton" class="uk-width-medium-1 md-btn md-btn-primary">Generate Notification</button>
-			</div>
+		</div>
+		
+		<div id="ctc_notif" style="display:none">
+			<span class="uk-text">You have <span id="notif_count" class="uk-badge uk-badge-warning"></span> new notifications</span>
 		</div>
 		
 		<div class="uk-width-medium-1" style="padding-top:+40px">
@@ -76,6 +105,19 @@
 	        	notifReload();
 	        }
 	    });
+	    
+	    $("#setNotif").on('click',function (){
+	    	var uid = $("#uid").val(); 
+	    	var erid = $("#er_id").val();
+	    	var stid = $("#stid").val();
+	    	$.ajax({
+		        url: 'create_notification/',
+		        data: {"UserId" : uid, "Status":stid, "ER_ID":erid},
+		        success: function(data) {
+		        	console.log("Create: "+data);
+		        }
+		    });
+	    });
 			
 	});
 	
@@ -94,39 +136,41 @@
                     	var bgcolor = null;
                     	var btnclr  = null;
                     	var badge_clr = null;
+                    	var status_msg = null;
                     	
                     	if(val.seen == 0){
                     		bgcolor = 'md-list-item-active';
                     	}
-
-                    	if(val.status == 'REMOVE_OFFER' || val.status == 'REMOVE_REQUEST' || val.status == 'REQUEST_PENDING'){ 
-                    		badge_clr = "uk-badge-warning";
-                    		btnclr = "md-btn-flat-warning";
-                    	}else if(val.status == 'CLOSE_OFFER' && val.status == 'CLOSE_REQUEST'){
-                    		badge_clr = "uk-badge-success";
-                    		btnclr = "md-btn-flat-success";
-                    	}else if(val.status == 'DECLINE_REQUEST'){
-                    		badge_clr = "uk-badge-danger";
-                    		btnclr = "md-btn-flat-danger";
-                    	}else if(val.status == 'REMOVE_EXCHANGE'){
-                    		badge_clr = "uk-badge-danger";
-                    		btnclr = "md-btn-flat-danger";
-                    	}
-                    	else{
+						
+                   	
+                    	if(val.status == 0){
+                    		badge_clr = "uk-badge-primary"; btnclr = "md-btn-flat-primary"; status_msg= "OFFER_OPEN";
+                    	}else if(val.status == 1){
+                    		badge_clr = "uk-badge-success"; btnclr = "md-btn-flat-success"; status_msg= "CLOSE_OFFER";
+                    	}else if(val.status == 2){
+                    		badge_clr = "uk-badge-success"; btnclr = "md-btn-flat-success"; status_msg= "CLOSE_REQUEST";
+                    	}else if(val.status == 3){
+                    		badge_clr = "uk-badge-warning"; btnclr = "md-btn-flat-warning"; status_msg= "REMOVE_OFFER";
+                    	}else if(val.status == 4){
+                    		badge_clr = "uk-badge-warning"; btnclr = "md-btn-flat-warning"; status_msg= "REMOVE_REQUEST";
+                    	}else if(val.status == 5){
+                    		badge_clr = "uk-badge-danger"; btnclr = "md-btn-flat-danger"; status_msg= "DECLINE_REQUEST";
+                    	}else if(val.status == 6){
+                    		badge_clr = "uk-badge-warning"; btnclr = "md-btn-flat-warning"; status_msg= "REQUEST_PENDING";
+                    	}else{
                     		badge_clr = null;
                     	}
                     	
-                    	
                     	$("#notification_list_content").append(
-                    		'<li id="'+val.notifiId+'" content="'+val.status+'" class="'+bgcolor+'">'+
+                    		'<li id="'+val.notifiId+'" content="'+status_msg+'" class="'+bgcolor+'">'+
                     			'<div class="uk-grid" data-uk-grid-margin>'+
 									'<div class="uk-width-medium-1-2">'+
 			                    		'<b>'+val.userId+'</b> | Trans.No: '+val.exchId+
-			                    		'. <i><span class="uk-badge '+badge_clr+'">'+val.status+'</span></i><br/> '+
+			                    		'. <i><span class="uk-badge '+badge_clr+'">'+status_msg+'</span></i><br/> '+
 			                    		'<i>'+val.content+'</i> on <i>'+val.notiDate+'</i>'+
 	                    		    '</div>'+
 	                    		    '<div class="uk-width-medium-1-2" align="right">'+
-	                    		    	'<button title="'+val.status+'" class="md-btn '+btnclr+' md-btn-flat">'+val.status+'</button>'+
+	                    		    	'<button title="'+status_msg+'" class="md-btn '+btnclr+' md-btn-flat">'+status_msg+'</button>'+
 	                    		    '</div>'+
 	                    		 '</div>'+  		
                     		'</li>'

@@ -302,6 +302,12 @@ public class PlatformDaoImp implements PlatformDao {
 			content = "YOUR EXCHANGE REQUEST IS PENDING";
 		}
 		
+		/*
+		 * STATUS EXPLANTION
+		 * 0 = OFFER_OPEN ; 1 = CLOSE_OFFER ; 2 = CLOSE_REQUEST ; 3 = REMOVE_OFFER
+		 * 4 = REMOVE_REQUEST ; 5 = DECLINE_REQUEST ; 6 = REQUEST_PENDING
+		 */
+		
 		//SET DATA TO NOTIFICATION MODEL
 		Notification notif = new Notification();
 		notif.setUserId(userId);
