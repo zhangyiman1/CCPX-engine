@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+                                   "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-1-7 21:46:33 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+ <class name="model.Request" table="Request">
+  <id length="11" name="Rid" type="int"/>
+  <property name="userFrom" type="int">
+   <column name="userFrom"/>
+  </property>   
+  <property name="userTo" type="int">
+   <column name="userTo"/>
+  </property>
+    <property name="sellerFrom" type="int">
+   <column name="sellerFrom"/>
+  </property>
+    <property name="sellerTo" type="int">
+   <column name="sellerTo"/>
+  </property>
+    <property name="pointsFrom" type="int">
+   <column name="pointsFrom"/>
+  </property>
+    <property name="pointsTo" type="int">
+   <column name="pointsTo"/>
+  </property>
+  <property name="offerFrom" type="int">
+   <column name="offerFrom"/>
+  </property>
+   <property name="offerTo" type="int">
+   <column name="offerTo"/>
+  </property>
+  <property generated="never" lazy="false" name="userNameFrom" type="java.lang.String">
+   <column name="userNameFrom"/>
+  </property>
+  <property generated="never" lazy="false" name="userNameTo" type="java.lang.String">
+   <column name="userNameTo"/>
+  </property>
+  <property generated="never" lazy="false" name="sellerNameFrom" type="java.lang.String">
+   <column name="sellerNameFrom"/>
+  </property>
+  <property generated="never" lazy="false" name="sellerNameTo" type="java.lang.String">
+   <column name="sellerNameTo"/>
+  </property>
+  <property generated="never" lazy="false" name="updateTime" type="java.lang.String">
+   <column name="updateTime"/>
+  </property>
+  <property generated="never" lazy="false" name="status" type="java.lang.String">
+   <column name="status"/>
+  </property> 
+ </class>
+</hibernate-mapping>

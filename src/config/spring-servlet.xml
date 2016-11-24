@@ -13,8 +13,13 @@
 	<context:component-scan base-package="service"></context:component-scan>
 
 	
+<<<<<<< HEAD
 	<mvc:annotation-driven></mvc:annotation-driven>
 	<bean id="viewResolver"
+=======
+	<mvc:annotation-driven></mvc:annotation-driven>
+	<bean id="viewResolver"
+>>>>>>> master
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 
 		<property name="prefix" value="/"></property>
@@ -28,7 +33,12 @@
 	<mvc:resources location="/images/" mapping="/images/**" />
 	<mvc:resources location="/img/" mapping="/img/**" />
 
+<<<<<<< HEAD
 	<!-- <mvc:resources location="/resource/" mapping="/resource/**" 
 		/> <mvc:resources location="/music/" mapping="/music/**" /> <mvc:resources 
+=======
+	<!-- <mvc:resources location="/resource/" mapping="/resource/**" 
+		/> <mvc:resources location="/music/" mapping="/music/**" /> <mvc:resources 
+>>>>>>> master
 		location="/ueditor/" mapping="/ueditor/**" /> -->
 </beans>
