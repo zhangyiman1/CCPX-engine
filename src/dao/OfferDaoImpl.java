@@ -75,7 +75,7 @@ public class OfferDaoImpl implements OfferDao{
 				ps = conn.prepareStatement(sql);
 				ps.setInt(1,seller_to);
 				ps.setInt(2,seller_from);
-				ps.setString(3, "1");
+				ps.setString(3, "avaliable");
 				rs = ps.executeQuery();
 				while(rs.next()){
 					//System.out.println("2查询开始");
@@ -133,6 +133,27 @@ public class OfferDaoImpl implements OfferDao{
 			JdbcUtils_C3P0.release(conn, ps, null);
 		}
 		
+	}
+
+	@Override
+	public String cancelOffers(int offer_id, int user_id) throws SQLException {
+		Connection conn = null;
+		PreparedStatement ps = null;
+		String sql = "update Offer set status=? where offer_id=? and user_id=?";
+		try {
+			conn = JdbcUtils_C3P0.getConnection();
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, "removed");
+			ps.setInt(2, offer_id);
+			ps.setInt(3, user_id);
+			ps.executeUpdate();
+			return "ok";
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return "error";
+		} finally {
+			JdbcUtils_C3P0.release(conn, ps, null);
+		}
 	}
 }
 

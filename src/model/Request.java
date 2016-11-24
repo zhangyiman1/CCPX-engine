@@ -8,7 +8,8 @@ public class Request {
 	int sellerTo;
 	int pointsFrom;
 	int pointsTo;
-	int offerId;
+	int offerFrom;
+	int offerTo;
 	String userNameFrom;
 	String userNameTo;
 	String sellerNameFrom;
@@ -81,12 +82,6 @@ public class Request {
 	public void setSellerNameTo(String sellerNameTo) {
 		this.sellerNameTo = sellerNameTo;
 	}
-	public int getOfferId() {
-		return offerId;
-	}
-	public void setOfferId(int offerId) {
-		this.offerId = offerId;
-	}
 	public String getUpdateTime() {
 		return updateTime;
 	}
@@ -98,6 +93,18 @@ public class Request {
 	}
 	public void setStatus(String status) {
 		this.status = status;
+	}
+	public int getOfferFrom() {
+		return offerFrom;
+	}
+	public void setOfferFrom(int offerFrom) {
+		this.offerFrom = offerFrom;
+	}
+	public int getOfferTo() {
+		return offerTo;
+	}
+	public void setOfferTo(int offerTo) {
+		this.offerTo = offerTo;
 	}
 	
 	

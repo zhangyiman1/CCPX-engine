@@ -18,7 +18,7 @@ public class User_to_SellerDaoImpl implements User_to_SellerDao{
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		ArrayList<user_to_seller> points = new ArrayList<>();
-		String sql = "select seller_id,points,points_blocked from user_to_seller where u_id = ?";
+		String sql = "select user_to_seller.seller_id,points,points_blocked,seller.Seller_Name from user_to_seller join seller on seller.Seller_id = user_to_seller.SELLER_ID where u_id = ?";
 		try {
 			conn = JdbcUtils_C3P0.getConnection();
 			ps = conn.prepareStatement(sql);
@@ -30,6 +30,7 @@ public class User_to_SellerDaoImpl implements User_to_SellerDao{
 			    uts.setpoints(rs.getInt(2));
 			    uts.setpoints_blocked(rs.getInt(3));
 			    uts.setu_id(id);
+			    uts.setSeller_name(rs.getString(4));
 			    points.add(uts);
 			}
 			
