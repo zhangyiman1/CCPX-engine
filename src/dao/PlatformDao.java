@@ -2,6 +2,7 @@ package dao;
 
 import java.util.List;
 
+import model.Notification;
 import model.Offer;
 import model.Request;
 public interface PlatformDao {
@@ -21,6 +22,13 @@ public interface PlatformDao {
  	public Boolean updateRequestStatus(Integer request_id, Integer user_from); 
  	
  	public Request requestData (Integer request_id); 
- 	public List<Integer> listOfRequest(Integer OfferFrom, Integer OfferTo); 
+ 	public List<Integer> listOfRequest(Integer OfferFrom, Integer OfferTo);
+	
+ 	
+ 	
+ 	public boolean createNotification(Integer userId, Integer status, Integer eR_ID);
+ 	//NOTIFACTION TESTPAGE
+ 	public List<Notification> NotifListsByUserId(Integer userId);
+	public List<Notification> getNotifUnRead(Integer userId); 
 
 }

@@ -7,6 +7,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import dao.PlatformDao;
+import model.Notification;
 import model.Offer;
 import model.Request;
 
@@ -97,4 +98,22 @@ public class PlatformServiceImp implements PlatformService {
 		return null;
 
 	}
+
+	@Override
+	public Boolean createNotification(Integer userId, Integer status, Integer eR_ID) {
+		if(PlatformDaoImp.createNotification(userId, status, eR_ID)) return true;
+		else return false;
+	}
+	
+	//NOTIFACTION TESTPAGE
+	@Override
+	public List<Notification> NotifListsByUserId(Integer userId) {
+		return PlatformDaoImp.NotifListsByUserId(userId);
+	}
+	@Override
+	public List<Notification> getNotifUnread(Integer userId) {
+		return PlatformDaoImp.getNotifUnRead(userId);
+	}
+
+
 }
