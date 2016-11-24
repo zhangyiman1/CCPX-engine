@@ -37,7 +37,9 @@ public class PlatformController {
 	private PlatformService PlatformServiceImp;
 
 	@RequestMapping("/removeExchange")
+
 	public String removeExchange(HttpServletRequest req, Integer request_id, Integer user_from) {
+
 
 		Boolean flag = PlatformServiceImp.removeExchange(request_id, user_from);
 		System.out.println("flag: " + flag);
@@ -45,7 +47,9 @@ public class PlatformController {
 	}
 
 	@RequestMapping("/declineExchange") 
+
 	public String declineExchange(HttpServletRequest req, Integer request_id, Integer user_to) {
+
 
 		Boolean flag = PlatformServiceImp.declineExchange(request_id, user_to);
 		System.out.println("flag: " + flag);
@@ -53,13 +57,24 @@ public class PlatformController {
 	}
 	
 	@RequestMapping("/removeOffer")  
+
+	
+
 	public String removeOffer(HttpServletRequest req, Integer offer_id, Integer user_id) {
+
 
 		Boolean flag = PlatformServiceImp.removeOffer(offer_id, user_id);
 		System.out.println("flag: " + flag);
 		return "index";
 	}
 	
+	 @RequestMapping("/acceptRequest")
+	 public String acceptRequest(HttpServletRequest req, Integer request_id){
+		int requestID = request_id;
+		Boolean flag = PlatformServiceImp.acceptRequest(requestID);
+		System.out.println("flag: " + flag);
+		return "index";
+	 }
 	
 	@RequestMapping("/exitTest")
 	public String exit(HttpServletRequest req) {
