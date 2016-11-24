@@ -1,8 +1,11 @@
 package service;
 
 import javax.annotation.Resource;
+
 import model.seller;
+
 import org.springframework.stereotype.Service;
+
 import dao.SellerManagementDao;
 
 @Service("sellerManagementServiceImp")

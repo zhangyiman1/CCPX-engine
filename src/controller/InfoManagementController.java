@@ -2,20 +2,21 @@ package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import model.industry_type;
 import model.seller;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-import org.apache.log4j.Logger;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import service.InfoManagementService;
 
 @Controller
@@ -92,6 +93,98 @@ public class InfoManagementController {
                 out.close();  
             } 
         } 
+	}
+	
+	@RequestMapping("/getCompanyDetail")
+	@ResponseBody
+	public void getCompanyDetail(HttpServletRequest req, HttpServletResponse res, String id) {
+		
+		
+		seller seller_result = infoManagementServiceImp.getCompanyDetail(id);
+		
+		if(seller_result!=null){
+		req.getSession().setAttribute("seller_result", seller_result);
+		String message = "{'message':'success'}";
+		JSONObject json = JSONObject.fromObject(message);
+        System.out.print(json);
+        System.out.close();
+        PrintWriter out =null;
+        try{
+        out = res.getWriter();
+        out.write(json.toString());
+        out.flush();
+        out.close();
+        }catch (IOException e) {  
+            e.printStackTrace();  
+        } finally {  
+            if (out != null) {  
+                out.close();  
+            } 
+        } 
+		}else{
+			String message = "{'message':'false'}";
+			JSONObject json = JSONObject.fromObject(message);
+	        System.out.print(json);
+	        System.out.close();
+	        PrintWriter out =null;
+	        try{
+	        out = res.getWriter();
+	        out.write(json.toString());
+	        out.flush();
+	        out.close();
+	        }catch (IOException e) {  
+	            e.printStackTrace();  
+	        } finally {  
+	            if (out != null) {  
+	                out.close();  
+	            } 
+	        } 
+		}
+	}
+	
+	@RequestMapping("/getSellerProfile")
+	@ResponseBody
+	public void getSellerProfile(HttpServletRequest req, HttpServletResponse res, String id) {
+		
+		
+		seller seller_result = infoManagementServiceImp.getCompanyDetail(id);
+		
+		if(seller_result!=null){
+		JSONObject json = JSONObject.fromObject(seller_result);
+        System.out.print(json);
+        System.out.close();
+        PrintWriter out =null;
+        try{
+        out = res.getWriter();
+        out.write(json.toString());
+        out.flush();
+        out.close();
+        }catch (IOException e) {  
+            e.printStackTrace();  
+        } finally {  
+            if (out != null) {  
+                out.close();  
+            } 
+        } 
+		}else{
+			String message = "{'message':'false'}";
+			JSONObject json = JSONObject.fromObject(message);
+	        System.out.print(json);
+	        System.out.close();
+	        PrintWriter out =null;
+	        try{
+	        out = res.getWriter();
+	        out.write(json.toString());
+	        out.flush();
+	        out.close();
+	        }catch (IOException e) {  
+	            e.printStackTrace();  
+	        } finally {  
+	            if (out != null) {  
+	                out.close();  
+	            } 
+	        } 
+		}
 	}
 	
 	

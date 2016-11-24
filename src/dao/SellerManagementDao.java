@@ -1,7 +1,6 @@
 package dao;
 
 import model.seller;
-import model.seller;
 
 public interface SellerManagementDao {
 

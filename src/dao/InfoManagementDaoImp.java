@@ -3,6 +3,7 @@ package dao;
 import java.util.List;
 
 import javax.annotation.Resource;
+
 import model.industry_type;
 import model.seller;
 
@@ -65,6 +66,15 @@ public class InfoManagementDaoImp implements InfoManagementDao {
 		query.setMaxResults(5);
 		List<seller> seller_list = query.list();
 		return seller_list;
+	}
+	
+	@Override
+	public seller getCompanyDetail(String id){
+		String hql = "from seller where Seller_id =:Seller_id";
+		Query query = getSession().createQuery(hql);
+		query.setString("Seller_id", id);
+		seller seller_result = (seller) query.uniqueResult();
+		return seller_result;
 	}
 
 }

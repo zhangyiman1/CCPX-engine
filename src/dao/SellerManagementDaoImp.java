@@ -1,16 +1,13 @@
 package dao;
 
 import javax.annotation.Resource;
-import java.util.List;
-import model.advertisement;
-import model.seller;
+
 import model.activation_code;
-import service.SellerManagementService;
-import org.apache.log4j.Logger;
+import model.seller;
+
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 

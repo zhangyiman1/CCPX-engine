@@ -29,15 +29,6 @@
 		<property name="hibernate.cache.use_second_level_cache">true</property>  
 		<property name="hibernate.cache.use_query_cache">true</property>
 	-->
-	<property name="myeclipse.connection.profile">
-		MySQL Driver
-	</property>
-	<property name="connection.url">jdbc:mysql://&lt;127.0.0.1&gt;[&lt;:3306&gt;]/&lt;ccpx_db&gt;</property>
-	<property name="connection.username">root</property>
-	<property name="connection.password">3220107</property>
-	<property name="connection.driver_class">
-		com.mysql.jdbc.Driver
-	</property>
 </session-factory>
 
 </hibernate-configuration>

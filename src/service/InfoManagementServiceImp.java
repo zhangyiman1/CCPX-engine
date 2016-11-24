@@ -3,10 +3,12 @@ package service;
 import java.util.List;
 
 import javax.annotation.Resource;
+
 import model.industry_type;
 import model.seller;
 
 import org.springframework.stereotype.Service;
+
 import dao.InfoManagementDao;
 
 @Service("infoManagementServiceImp")
@@ -34,6 +36,11 @@ public class InfoManagementServiceImp implements InfoManagementService {
 	@Override
 	public List<seller> getSellerInfo(){
 		return infoManagementDaoImp.getSellerInfo();
+	}
+	
+	@Override
+	public seller getCompanyDetail(String id){
+		return infoManagementDaoImp.getCompanyDetail(id);
 	}
 
 }

@@ -1,17 +1,15 @@
 package controller;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+
 import javax.annotation.Resource;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import model.seller;
 import net.sf.json.JSONObject;
 
@@ -23,7 +21,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import service.SellerManagementService;
 import utils.MD5Util;
-import utils.VerifyCode;
 
 @Controller
 @RequestMapping(value ="/seller")
@@ -247,7 +244,7 @@ public class SellerManagementController {
 	                	 type=fileName.indexOf(".")!=-1?fileName.substring(fileName.lastIndexOf(".")+1, fileName.length()):null;
 	                	 if (type!=null) {
 	                		 if ("PNG".equals(type.toUpperCase())||"JPG".equals(type.toUpperCase())) {//图片格式正确，执行regist操作
-	                			String realPath=req.getSession().getServletContext().getRealPath("/")+"images\\";
+	                			String realPath=req.getSession().getServletContext().getRealPath("/")+"images/";
 	     		                String trueFileName=seller_Username+"."+type;
 	     		                path=realPath+trueFileName;
 	     		                System.out.println("存放图片文件的路径:"+path);
@@ -257,7 +254,7 @@ public class SellerManagementController {
 	     	       		            e.printStackTrace();  
 	     	       		        } finally {  
 	     	       		        } 
-	     		                Seller.setSeller_Logo("images\\"+trueFileName);
+	     		                Seller.setSeller_Logo("images/"+trueFileName);
 	     		                boolean b = sellerManagementServiceImp.regist(Seller);
 	     		               if (b) {
 	   	           			    String message = "success";
