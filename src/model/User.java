@@ -1,69 +1,55 @@
 package model;
 
-public class User {
+public class user {
 
-	int id;
-	String wechatid;
-	String name;
-	String email;
-	String password;
-	String fullname;
-	String token;
-	
-	public User(){};
-	public User(int id, String wechatid, String name, String email,
-			String password, String fullname, String token) {
-		super();
-		this.id = id;
-		this.wechatid = wechatid;
-		this.name = name;
-		this.email = email;
-		this.password = password;
-		this.fullname = fullname;
-		this.token = token;
+	private int u_id;
+	private String u_wechat_id;
+	private String u_name;
+	private String u_email_address;
+	private String u_pw_hash;
+	private String u_full_name;
+	private String u_token;
+	public int getU_id() {
+		return u_id;
 	}
-	public int getId() {
-		return id;
+	public void setU_id(int u_id) {
+		this.u_id = u_id;
 	}
-	public void setId(int id) {
-		this.id = id;
+	public String getU_wechat_id() {
+		return u_wechat_id;
 	}
-	public String getWechatid() {
-		return wechatid;
+	public void setU_wechat_id(String u_wechat_id) {
+		this.u_wechat_id = u_wechat_id;
 	}
-	public void setWechatid(String wechatid) {
-		this.wechatid = wechatid;
+	public String getU_name() {
+		return u_name;
 	}
-	public String getName() {
-		return name;
+	public void setU_name(String u_name) {
+		this.u_name = u_name;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public String getU_email_address() {
+		return u_email_address;
 	}
-	public String getEmail() {
-		return email;
+	public void setU_email_address(String u_email_address) {
+		this.u_email_address = u_email_address;
 	}
-	public void setEmail(String email) {
-		this.email = email;
+	public String getU_pw_hash() {
+		return u_pw_hash;
 	}
-	public String getPassword() {
-		return password;
+	public void setU_pw_hash(String u_pw_hash) {
+		this.u_pw_hash = u_pw_hash;
 	}
-	public void setPassword(String password) {
-		this.password = password;
+	public String getU_full_name() {
+		return u_full_name;
 	}
-	public String getFullname() {
-		return fullname;
+	public void setU_full_name(String u_full_name) {
+		this.u_full_name = u_full_name;
 	}
-	public void setFullname(String fullname) {
-		this.fullname = fullname;
+	public String getU_token() {
+		return u_token;
 	}
-	public String getToken() {
-		return token;
+	public void setU_token(String u_token) {
+		this.u_token = u_token;
 	}
-	public void setToken(String token) {
-		this.token = token;
-	}
-	
 	
 }
