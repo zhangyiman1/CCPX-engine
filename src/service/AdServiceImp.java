@@ -1,23 +1,44 @@
 package service;
 
+import java.util.List;
+
 import javax.annotation.Resource;
+
+import model.ad_present;
+import model.advertisement;
 
 import org.springframework.stereotype.Service;
 
-import model.advertisement;
-import dao.*;
+import dao.AdDao;
 
-@Service("AdServiceImp")
+@Service("adServiceImp")
 public class AdServiceImp implements AdService {
-	@Resource(name = "AdDaoImp")
-	private AdDao addao= new AdDaoImp();
-	public void uploadAd(model.seller seller,String adtitle,String adimage)
-	{
-		addao.addAd(seller,adtitle,adimage);
+	
+	@Resource(name = "adDaoImp")
+	private AdDao adDaoImp;
+	
+	@Override
+	public List<ad_present> getAd(){
+		return adDaoImp.getAd();
 	}
-	public advertisement checkAd(String adtitle)
-	{
-		return addao.checkAd(adtitle);
+	@Override
+	public List<advertisement> getAdBySellerID(String id){
+		return adDaoImp.getAdBySellerID(id);
 	}
-
+	@Override
+	public int getNumberOfAdBySellerID(String id){
+		return adDaoImp.getNumberOfAdBySellerID(id);
+	}
+	@Override
+	public boolean addAd(advertisement newad){
+		return adDaoImp.addAd(newad);
+	}
+	@Override
+	public advertisement getAdByAdID(String id){
+		return adDaoImp.getAdByAdID(id);
+	}
+	
+	public boolean editAdd(advertisement ad){
+		return adDaoImp.editAdd(ad);
+	}
 }
