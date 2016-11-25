@@ -82,6 +82,19 @@ public class Request {
 	public void setSellerNameTo(String sellerNameTo) {
 		this.sellerNameTo = sellerNameTo;
 	}
+	public int getOfferFrom() {
+		return offerFrom;
+	}
+	public void setOfferFrom(int offerFrom) {
+		this.offerFrom = offerFrom;
+	}
+	
+	public int getOfferTo() {
+		return offerTo;
+	}
+	public void setOfferTo(int offerTo) {
+		this.offerTo = offerTo;
+	}
 	public String getUpdateTime() {
 		return updateTime;
 	}
@@ -93,18 +106,6 @@ public class Request {
 	}
 	public void setStatus(String status) {
 		this.status = status;
-	}
-	public int getOfferFrom() {
-		return offerFrom;
-	}
-	public void setOfferFrom(int offerFrom) {
-		this.offerFrom = offerFrom;
-	}
-	public int getOfferTo() {
-		return offerTo;
-	}
-	public void setOfferTo(int offerTo) {
-		this.offerTo = offerTo;
 	}
 	
 	
