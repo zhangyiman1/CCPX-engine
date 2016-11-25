@@ -11,12 +11,17 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import model.Notification;
 import model.Offer;
 import model.Request;
+import net.sf.json.JSONArray;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import dao.PlatformDaoImp;
 import service.PlatformService;
@@ -120,4 +125,54 @@ public class PlatformController {
 	 public List<Offer> showRecommendationList(Integer sellerFrom, Integer sellerTo, Integer pointsFrom, Integer pointsToMin){
 		return new PlatformDaoImp().searchExcahnge(sellerFrom, sellerTo, pointsFrom, pointsToMin); 
 	 }
+	 
+	 
+	 
+	 private void CreateNotifications(Integer UserId, Integer Status, Integer ER_ID){
+		 System.out.println(UserId+" "+Status);
+		 
+		 Boolean b = PlatformServiceImp.createNotification(UserId, Status, ER_ID);
+		 if(b){
+			 System.out.println("NotifFlag: " + b+" Success!");
+		 }else{
+			 System.out.println("NotifFlag: " + b+" Failed!");
+		 }
+	 }
+	 
+	 
+	 	 
+	 
+	 //------------NOTIFACTION TESTPAGE--------------
+	 @RequestMapping(value="/create_notification", method = RequestMethod.GET)
+	 public @ResponseBody String CreateNotification(@RequestParam Integer UserId, Integer Status, Integer ER_ID){
+		 System.out.print(UserId);
+		 String msg = null;
+		 Boolean flag = PlatformServiceImp.createNotification(UserId, Status, ER_ID);
+		 if(flag){
+			 System.out.println("NotifFlag: " + flag+" Success!");
+			 msg="success";
+		 }else{
+			 System.out.println("NotifFlag: " + flag+" Failed!");
+			 msg="failed";
+		 }
+		 return msg;
+	 }
+	 
+	 @RequestMapping(value="/notif_list_by_user_id", method = RequestMethod.GET)
+	 public @ResponseBody JSONArray NotifListsByUserId(@RequestParam Integer userId){
+		List<Notification> notiflitsList = PlatformServiceImp.NotifListsByUserId(userId);
+		JSONArray json = JSONArray.fromObject(notiflitsList);
+		System.out.print(json);
+		return json;
+	 }
+	 @RequestMapping(value="/notif_unread", method = RequestMethod.GET)
+	 public @ResponseBody int getNotifUnread(@RequestParam Integer userId){
+		 List<Notification> notif = PlatformServiceImp.getNotifUnread(userId);
+		 JSONArray jsonArray = JSONArray.fromObject(notif);
+		 System.out.print(jsonArray.size());
+		 int a = jsonArray.size();
+		 return a; 
+	 }
+	 
+	 
 }

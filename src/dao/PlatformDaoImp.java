@@ -1,12 +1,16 @@
 package dao;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import dao.PlatformDao;
 
 import javax.annotation.Resource;
 
+import model.Notification;
 import model.Offer;
 import model.Request;
 
@@ -270,6 +274,76 @@ public class PlatformDaoImp implements PlatformDao {
 		}
 
 		return requests;
+	}
+
+	@Override
+	public boolean createNotification(Integer userId, Integer status, Integer eR_ID) {
+		String content = null;
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String nDateString = dateFormat.format(new Date());
+
+		//EXPLANATION OFFER AND REQUEST
+		if(status.equals(0)){  //0 = OFFER_OPEN
+			content = "YOUR EXCHANGE OFFER WAITING FOR RESPOND";
+		}
+		else if(status.equals(1) || status.equals(2)){ //1 = CLOSE_OFFER ; 2 = CLOSE_REQUEST
+			content = "YOUR EXCHANGE SUCCESFULLY DONE";
+		}
+		else if(status.equals(3)){ //3 = REMOVE_OFFER
+			content = "YOUR EXCHANGE OFFER HAS BEEN REMOVED";
+		}
+		else if(status.equals(4)){ // 4 = REMOVE_REQUEST
+			content = "YOUR EXCHANGE REQUEST HAS BEEN REMOVED";
+		}
+		else if(status.equals(5)){ //5 = DECLINE_REQUEST
+			content = "YOUR EXCHANGE REQUEST HAS BEEN DECLINED";
+		}
+		else if(status.equals(6)){//6 = REQUEST_PENDING
+			content = "YOUR EXCHANGE REQUEST IS PENDING";
+		}
+		
+		/*
+		 * STATUS EXPLANTION
+		 * 0 = OFFER_OPEN ; 1 = CLOSE_OFFER ; 2 = CLOSE_REQUEST ; 3 = REMOVE_OFFER
+		 * 4 = REMOVE_REQUEST ; 5 = DECLINE_REQUEST ; 6 = REQUEST_PENDING
+		 */
+		
+		//SET DATA TO NOTIFICATION MODEL
+		Notification notif = new Notification();
+		notif.setUserId(userId);
+		notif.setContent(content);
+		notif.setStatus(status);
+		notif.setSeen(0);
+		notif.setNotiDate(nDateString);
+		notif.setExchId(eR_ID);
+		
+		//QUERY EXECUTION
+		session=getSession(); 
+		session.beginTransaction();
+		session.save(notif);
+		session.flush();	
+		session.getTransaction().commit();
+		session.close();
+		return true;
+	}
+
+	@Override
+	public List<Notification> NotifListsByUserId(Integer userId) {
+		String hql = "from Notification where USER_ID=:USER_ID order by USER_ID desc";
+		Query query = getSession().createQuery(hql);
+		query.setInteger("USER_ID", userId);
+		List<Notification> notif_list = query.list();
+		return notif_list;
+	}
+
+	@Override
+	public List<Notification> getNotifUnRead(Integer userId) {
+		String hql = "from Notification where USER_ID=:USER_ID and SEEN=:SEEN";
+		Query query = getSession().createQuery(hql);
+		query.setInteger("USER_ID", userId);
+		query.setInteger("SEEN", 0);
+		List<Notification> notif_list = query.list();
+		return notif_list;
 	}
 
 }

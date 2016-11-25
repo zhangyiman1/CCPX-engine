@@ -2,6 +2,7 @@ package service;
 
 import java.util.List;
 
+import model.Notification;
 import model.Offer;
 import model.Request;
 
@@ -26,6 +27,12 @@ public interface PlatformService {
 
 	public Boolean acceptRequest(Integer request_id);
 
+	public Boolean createNotification(Integer userId, Integer status, Integer eR_ID);
+	
+	
+	//NOTIFACTION TESTPAGE
+	public List<Notification> NotifListsByUserId(Integer userId);
+	public List<Notification> getNotifUnread(Integer userId);
 
 	
 }
