@@ -23,7 +23,7 @@ import org.hibernate.Transaction;
 import org.hibernate.transform.Transformers;
 import org.springframework.stereotype.Service;
 
-import sun.org.mozilla.javascript.internal.ObjArray;
+//import sun.org.mozilla.javascript.internal.ObjArray; Comment by NUT it make the souce code error
 
 import com.alibaba.fastjson.JSON;
 import com.mysql.jdbc.Connection;
