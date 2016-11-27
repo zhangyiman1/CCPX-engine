@@ -79,6 +79,44 @@ public class PlatformDaoImp implements PlatformDao {
 		List<Request> requests = query.list();
 		return requests;
 	}
+	
+	@Override
+	public List<Request> showUserReceivedRequest(Integer user_id, String status) {
+		List<Request> requests = null; 
+		String sql = "from Request where userTo=?0 and status=?1 order by updateTime desc";
+		Query query = getSession().createQuery(sql);
+		query.setInteger(0, user_id);
+		query.setString(1, status);
+		System.out.println(query.list());
+		requests = query.list();
+		return requests;
+	}
+	
+	@Override
+	public List<Request> showUserSentRequest(Integer user_id, String status) {
+		List<Request> requests = null; 
+		String sql = "from Request where userFrom=?0 and status=?1 order by updateTime desc";
+		Query query = getSession().createQuery(sql);
+		query.setInteger(0, user_id);
+		query.setString(1, status);
+		System.out.println(query.list());
+		requests = query.list();
+		return requests;
+	}
+	
+	@Override
+	public List<Offer> showUserOfferList(Integer user_id, String status) {
+		List<Offer> list = new ArrayList<Offer>();
+		String hql = "from Offer where userFrom= :userFrom status= :status";
+		Query query = getSession().createQuery(hql);
+		query.setInteger("userFrom", user_id);
+		query.setString("status", status);
+		Offer offer = (Offer) query.uniqueResult();
+		list.add(offer);
+		return list;
+	}
+
+
 
 	@Override
 	public List<Offer> showRecommendationList(Integer sellerFrom, Integer sellerTo, Integer pointsFrom,
@@ -159,11 +197,10 @@ public class PlatformDaoImp implements PlatformDao {
 	}
 
 	@Override
-	public Boolean updateOfferStatus(Integer offer_id, Integer user_from) {
-		String sql = "update Offer set  STATUS=:STATUS where OFFER_ID=:OFFER_ID and USER_ID=:USER_ID";
+	public Boolean updateOfferStatus(Integer offer_id) {
+		String sql = "update Offer set  STATUS=:STATUS where OFFER_ID=:OFFER_ID";
 		Query query = getSession().createQuery(sql);
 		query.setInteger("OFFER_ID", offer_id);
-		query.setInteger("USER_ID", user_from);
 		query.setString("STATUS", "CLOSED");
 		int a = query.executeUpdate();
 		if (a > 0) {
@@ -175,12 +212,11 @@ public class PlatformDaoImp implements PlatformDao {
 	}
 
 	@Override
-	//Update all of related request status
-	public Boolean updateRequestStatus(Integer request_id, Integer user_from) {
-		String sql = "update Request set  status=:status where Rid=:Rid and userTo=:userTo";
+	// Update all of related request status
+	public Boolean updateRequestStatus(Integer request_id) {
+		String sql = "update Request set  status=:status where Rid=:Rid";
 		Query query = getSession().createQuery(sql);
 		query.setInteger("Rid", request_id);
-		query.setInteger("userTo", user_from);
 		query.setString("status", "CLOSED");
 		int a = query.executeUpdate();
 		if (a > 0) {
@@ -250,10 +286,12 @@ public class PlatformDaoImp implements PlatformDao {
 	@Override
 	public List<Integer> listOfRequest(Integer OfferFrom, Integer OfferTo) {
 		List<Integer> requests;
-		// OfferFrom is not null means userFrom found offer from make offer recommendation
+		// OfferFrom is not null means userFrom found offer from make offer
+		// recommendation
 		// here we select all of exchange request sent to OfferTo and OfferFrom
 		if (OfferFrom != null) {
-			String sql = "SELECT E.Rid from Request E where " + "(offerTo =? OR offerTo =? OR offerFrom=? OR offerFrom=?)";
+			String sql = "SELECT E.Rid from Request E where "
+					+ "(offerTo =? OR offerTo =? OR offerFrom=? OR offerFrom=?)";
 			Query query = getSession().createQuery(sql);
 			query.setInteger(0, OfferFrom);
 			query.setInteger(1, OfferTo);
@@ -264,7 +302,7 @@ public class PlatformDaoImp implements PlatformDao {
 
 		} else {
 			// OfferFrom is null means userFrom found offer from searchExchange
-			// here we select all of exchange request sent to OfferTo 
+			// here we select all of exchange request sent to OfferTo
 			String sql = "SELECT E.Rid from Request E where " + "offerTo =? OR offerFrom=?";
 			Query query = getSession().createQuery(sql);
 			query.setInteger(0, OfferTo);
@@ -276,39 +314,58 @@ public class PlatformDaoImp implements PlatformDao {
 		return requests;
 	}
 
+	public Integer declineRequests(Integer request_id) {
+		Integer user_from;
+		String sql = "update Request set  status=:status where Rid=:Rid";
+		Query query = getSession().createQuery(sql);
+		query.setInteger("Rid", request_id);
+		query.setString("status", "CLOSED");
+		int a = query.executeUpdate();
+		if (a > 0) {
+			System.out.println("Request_ID " + request_id + " has been declined! Successfully");
+		} else {
+			System.out.println("Request_ID " + request_id + " has not been declined! Failed");
+		}
+		String hql = "select E.userFrom Request E where Rid1=:Rid";
+		Query query1 = getSession().createQuery(hql);
+		query.setInteger("Rid1", request_id);
+		user_from = (Integer) query1.uniqueResult();
+
+		return user_from;
+
+	}
+
 	@Override
 	public boolean createNotification(Integer userId, Integer status, Integer eR_ID) {
 		String content = null;
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String nDateString = dateFormat.format(new Date());
 
-		//EXPLANATION OFFER AND REQUEST
-		if(status.equals(0)){  //0 = OFFER_OPEN
+		// EXPLANATION OFFER AND REQUEST
+		if (status.equals(0)) { // 0 = OFFER_OPEN
 			content = "YOUR EXCHANGE OFFER WAITING FOR RESPOND";
-		}
-		else if(status.equals(1) || status.equals(2)){ //1 = CLOSE_OFFER ; 2 = CLOSE_REQUEST
+		} else if (status.equals(1) || status.equals(2)) { // 1 = CLOSE_OFFER ;
+															// 2 = CLOSE_REQUEST
 			content = "YOUR EXCHANGE SUCCESFULLY DONE";
-		}
-		else if(status.equals(3)){ //3 = REMOVE_OFFER
+		} else if (status.equals(3)) { // 3 = REMOVE_OFFER
 			content = "YOUR EXCHANGE OFFER HAS BEEN REMOVED";
-		}
-		else if(status.equals(4)){ // 4 = REMOVE_REQUEST
+		} else if (status.equals(4)) { // 4 = REMOVE_REQUEST
 			content = "YOUR EXCHANGE REQUEST HAS BEEN REMOVED";
-		}
-		else if(status.equals(5)){ //5 = DECLINE_REQUEST
+		} else if (status.equals(5)) { // 5 = DECLINE_REQUEST
 			content = "YOUR EXCHANGE REQUEST HAS BEEN DECLINED";
-		}
-		else if(status.equals(6)){//6 = REQUEST_PENDING
+		} else if (status.equals(6)) {// 6 = REQUEST_PENDING
 			content = "YOUR EXCHANGE REQUEST IS PENDING";
+		} else if (status.equals(7)) {// 6 = REQUEST_PENDING
+			content = "YOUR DECLINED EXCHANGE REQUEST";
 		}
-		
+
 		/*
-		 * STATUS EXPLANTION
-		 * 0 = OFFER_OPEN ; 1 = CLOSE_OFFER ; 2 = CLOSE_REQUEST ; 3 = REMOVE_OFFER
-		 * 4 = REMOVE_REQUEST ; 5 = DECLINE_REQUEST ; 6 = REQUEST_PENDING
+		 * STATUS EXPLANTION 0 = OFFER_OPEN ; 1 = CLOSE_OFFER ; 2 =
+		 * CLOSE_REQUEST ; 3 = REMOVE_OFFER 4 = REMOVE_REQUEST ; 5 =
+		 * DECLINE_REQUEST ; 6 = REQUEST_PENDING
 		 */
-		
-		//SET DATA TO NOTIFICATION MODEL
+
+		// SET DATA TO NOTIFICATION MODEL
 		Notification notif = new Notification();
 		notif.setUserId(userId);
 		notif.setContent(content);
@@ -316,12 +373,12 @@ public class PlatformDaoImp implements PlatformDao {
 		notif.setSeen(0);
 		notif.setNotiDate(nDateString);
 		notif.setExchId(eR_ID);
-		
-		//QUERY EXECUTION
-		session=getSession(); 
+
+		// QUERY EXECUTION
+		session = getSession();
 		session.beginTransaction();
 		session.save(notif);
-		session.flush();	
+		session.flush();
 		session.getTransaction().commit();
 		session.close();
 		return true;

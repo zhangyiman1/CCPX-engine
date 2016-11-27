@@ -53,10 +53,10 @@ public class PlatformController {
 
 	@RequestMapping("/declineExchange") 
 
-	public String declineExchange(HttpServletRequest req, Integer request_id, Integer user_to) {
+	public String declineExchange(HttpServletRequest req, Integer request_id, Integer user_to, Integer user_from) {
 
 
-		Boolean flag = PlatformServiceImp.declineExchange(request_id, user_to);
+		Boolean flag = PlatformServiceImp.declineExchange(request_id, user_to, user_from);
 		System.out.println("flag: " + flag);
 		return "index";
 	}

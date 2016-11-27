@@ -20,20 +20,30 @@ public class PlatformServiceImp implements PlatformService {
 	@Override
 	public Boolean removeExchange(Integer request_id, Integer user_from) {
 		Boolean flag = PlatformDaoImp.removeExchange(request_id, user_from);
-		System.out.println("flag: " + flag);
+		Boolean flag1 = PlatformDaoImp.createNotification(user_from, 4, request_id);
+		System.out.println("flag: " + flag + "flag1:" + flag1);
 		return flag;
 	}
 
 	@Override
-	public Boolean declineExchange(Integer request_id, Integer user_to) {
+	public Boolean declineExchange(Integer request_id, Integer user_to, Integer user_from) {
 		Boolean flag = PlatformDaoImp.declineExchange(request_id, user_to);
-		System.out.println("flag: " + flag);
+		Boolean flag1 = PlatformDaoImp.createNotification(user_to, 7, request_id);
+		Boolean flag2 = PlatformDaoImp.createNotification(user_from, 5, request_id);
+		System.out.println("flag: " + flag + "flag1: " + flag1 + "flag2: " + flag2);
 		return flag;
 	}
 
 	@Override
 	public Boolean removeOffer(Integer offer_id, Integer user_id) {
 		Boolean flag = PlatformDaoImp.removeOffer(offer_id, user_id);
+		Boolean flag1 = PlatformDaoImp.createNotification(user_id, 3, offer_id);
+		List<Integer> requestList = PlatformDaoImp.listOfRequest(null, offer_id);
+		for (int i = 0; i < requestList.size(); i++) {
+			Integer r1 = requestList.get(i);
+			Integer userFrom1 = PlatformDaoImp.declineRequests(r1);
+			Boolean createNotification = PlatformDaoImp.createNotification(userFrom1, 5, r1);
+		}
 		System.out.println("flag: " + flag);
 		return flag;
 	}
@@ -59,14 +69,14 @@ public class PlatformServiceImp implements PlatformService {
 
 	@Override
 	public Boolean updateOfferStatus(Integer offer_id, Integer user_from) {
-		Boolean flag = PlatformDaoImp.updateOfferStatus(offer_id, user_from);
+		Boolean flag = PlatformDaoImp.updateOfferStatus(offer_id);
 		System.out.println("flag: " + flag);
 		return flag;
 	}
 
 	@Override
 	public Boolean updateRequestStatus(Integer request_id, Integer user_from) {
-		Boolean flag = PlatformDaoImp.updateRequestStatus(request_id, user_from);
+		Boolean flag = PlatformDaoImp.updateRequestStatus(request_id);
 		System.out.println("flag: " + flag);
 		return flag;
 
@@ -94,6 +104,13 @@ public class PlatformServiceImp implements PlatformService {
 		Boolean acc = PlatformDaoImp.acceptRequest(request_id, OfferFrom, OfferTo);
 		List<Integer> requestList = PlatformDaoImp.listOfRequest(OfferFrom, OfferTo);
 		requestList.remove(request_id);
+		for (int i = 0; i < requestList.size(); i++) {
+			Integer r1 = requestList.get(i);
+			Integer userFrom1 = PlatformDaoImp.declineRequests(r1);
+			Boolean createNotification = PlatformDaoImp.createNotification(userFrom1, 5, r1);
+		}
+		Boolean succesToUserFrom = PlatformDaoImp.createNotification(UserFrom, 2, request_id);
+		Boolean succesToUserTo = PlatformDaoImp.createNotification(UserTo, 2, request_id);
 
 		return null;
 
@@ -101,19 +118,37 @@ public class PlatformServiceImp implements PlatformService {
 
 	@Override
 	public Boolean createNotification(Integer userId, Integer status, Integer eR_ID) {
-		if(PlatformDaoImp.createNotification(userId, status, eR_ID)) return true;
-		else return false;
+		if (PlatformDaoImp.createNotification(userId, status, eR_ID))
+			return true;
+		else
+			return false;
 	}
-	
-	//NOTIFACTION TESTPAGE
+
+	// NOTIFACTION TESTPAGE
 	@Override
 	public List<Notification> NotifListsByUserId(Integer userId) {
 		return PlatformDaoImp.NotifListsByUserId(userId);
 	}
+
 	@Override
 	public List<Notification> getNotifUnread(Integer userId) {
 		return PlatformDaoImp.getNotifUnRead(userId);
 	}
 
+	@Override
+	public List<Request> showUserReceivedRequest(Integer user_id, String status) {
+		return PlatformDaoImp.showUserReceivedRequest(user_id, status);
+	}
+
+	@Override
+	public List<Request> showUserSentRequest(Integer user_id, String status) {
+		return PlatformDaoImp.showUserSentRequest(user_id, status);
+
+	}
+
+	@Override
+	public List<Offer> showUserOfferList(Integer user_id, String status) {
+		return PlatformDaoImp.showUserOfferList(user_id, status);
+	}
 
 }
