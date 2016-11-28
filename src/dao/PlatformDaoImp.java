@@ -81,19 +81,23 @@ public class PlatformDaoImp implements PlatformDao {
 	}
 
 	@Override
-	public List<Offer> showRecommendationList(Integer sellerFrom, Integer sellerTo, Integer pointsFrom,
-			Integer pointsToMin) {
+	public List<Offer> showRecommendationList(Integer seller_from, Integer seller_to, Integer points_from,
+			Integer points_to_min) {
+		
 		List<Offer> list = new ArrayList<Offer>();
-		String hql = "from Offer where pointsFrom>= :pointsToMin and pointsToMin<= :pointsFrom "
-				+ "and sellerFrom =:sellerTo and sellerTo =:sellerFrom and status= :status";
-		Query query = getSession().createQuery(hql);
-		query.setInteger("sellerFrom", sellerFrom);
-		query.setInteger("sellerTo", sellerTo);
-		query.setInteger("pointsFrom", pointsFrom);
-		query.setInteger("pointsToMin", pointsToMin);
-		query.setString("status", "OPEN");
-		Offer offer = (Offer) query.uniqueResult();
-		list.add(offer);
+		String hql = "from Offer where points_from>= :points_to_min and points_to_min<= :points_from "
+				+ "and seller_from =:seller_to and seller_to =:seller_from and status= :status order by points_to_min";
+		int m =0;int n =5;	  
+		Query query =  getSession().createQuery(hql);
+		query.setFirstResult(m); //开始记录
+		query.setMaxResults(n);//查询多少条
+		query.setInteger("seller_from",seller_from );
+		query.setInteger("seller_to", seller_to);
+		query.setInteger("points_from", points_from);
+		query.setInteger("points_to_min",points_to_min );	
+		query.setString("status", "open");
+		Offer offer = new Offer();
+		list = query.list();		
 		return list;
 	}
 
