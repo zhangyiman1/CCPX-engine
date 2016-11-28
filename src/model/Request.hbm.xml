@@ -3,7 +3,7 @@
                                    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!-- Generated 2015-1-7 21:46:33 by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
- <class name="model.Request" table="Request">
+ <class name="model.Request" table="request">
   <id length="11" name="Rid" type="int"/>
   <property name="userFrom" type="int">
    <column name="userFrom"/>
@@ -28,18 +28,6 @@
   </property>
    <property name="offerTo" type="int">
    <column name="offerTo"/>
-  </property>
-  <property generated="never" lazy="false" name="userNameFrom" type="java.lang.String">
-   <column name="userNameFrom"/>
-  </property>
-  <property generated="never" lazy="false" name="userNameTo" type="java.lang.String">
-   <column name="userNameTo"/>
-  </property>
-  <property generated="never" lazy="false" name="sellerNameFrom" type="java.lang.String">
-   <column name="sellerNameFrom"/>
-  </property>
-  <property generated="never" lazy="false" name="sellerNameTo" type="java.lang.String">
-   <column name="sellerNameTo"/>
   </property>
   <property generated="never" lazy="false" name="updateTime" type="java.lang.String">
    <column name="updateTime"/>

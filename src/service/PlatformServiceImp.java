@@ -94,11 +94,9 @@ public class PlatformServiceImp implements PlatformService {
 		Integer OfferFrom = request.getOfferFrom();
 		Integer OfferTo = request.getOfferTo();
 		request = PlatformDaoImp.requestData(request_id);
-		// Boolean success = PlatformDaoImp.sendExchangeToBC(Integer request_id,
-		// Integer UserFrom, Integer UserTo,
-		// Integer PointsFrom, Integer PointsTo, Integer SellerFrom, Integer
-		// SellerTo);
-		Boolean success = true;
+		Boolean success = PlatformDaoImp.sendExchangeToBlockChain(request_id,
+				UserFrom, UserTo, SellerFrom,
+				SellerTo, PointsFrom, PointsTo);
 		// call notification notifi(OfferFrom) notifi(OfferTo) notifi(UserFrom)
 		// notifi(UserTo)
 		Boolean acc = PlatformDaoImp.acceptRequest(request_id, OfferFrom, OfferTo);

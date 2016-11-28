@@ -32,6 +32,8 @@ public interface PlatformDao {
  	public boolean createNotification(Integer userId, Integer status, Integer eR_ID);
  	//NOTIFACTION TESTPAGE
  	public List<Notification> NotifListsByUserId(Integer userId);
-	public List<Notification> getNotifUnRead(Integer userId); 
+	public List<Notification> getNotifUnRead(Integer userId);
+	boolean sendExchangeToBlockChain(Integer Request_id, Integer userFrom, Integer userTo, Integer sellerFrom,
+			Integer sellerTo, Integer pointFrom, Integer pointTo); 
 
 }

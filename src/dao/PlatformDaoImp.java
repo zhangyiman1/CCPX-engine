@@ -1,10 +1,16 @@
 package dao;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.net.URL;
+import java.net.URLConnection;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import org.apache.commons.io.IOUtils;
 
 import dao.PlatformDao;
 
@@ -18,6 +24,8 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.springframework.stereotype.Repository;
+
+import com.alibaba.fastjson.JSONObject;
 
 import javax.annotation.Resource;
 
@@ -402,5 +410,46 @@ public class PlatformDaoImp implements PlatformDao {
 		List<Notification> notif_list = query.list();
 		return notif_list;
 	}
+	@Override
+	public boolean sendExchangeToBlockChain(Integer Request_id,
+			Integer userFrom, Integer userTo, Integer sellerFrom,
+			Integer sellerTo, Integer pointFrom, Integer pointTo) {
+		// TODO Auto-generated method stub		
+		//String sr=HttpRequest.sendPost("http://ccpx-blockchain.mybluemix.net/getTxInfo","Request_id=Request_id&user_A=userFrom&user_B=userTo&seller_A=sellerFrom&seller_B=sellerTo&point_A=pointFrom&point_B=pointTo&time=time");
+        try{  
+            // Configure and open a connection to the site you will send the request  
+            URL url = new URL("http://ccpx-blockchain.mybluemix.net/getTxInfo");  
+            URLConnection urlConnection = url.openConnection();  
+            // set attribute of doOutput as true,表示将使用此urlConnection写入数据  
+            urlConnection.setDoOutput(true);  
+            // 定义待写入数据的内容类型，这里设置为application/x-www-form-urlencoded类型  
+            urlConnection.setRequestProperty("content-type", "application/x-www-form-urlencoded");  
+            // 得到请求的输出流对象  
+            OutputStreamWriter out = new OutputStreamWriter(urlConnection.getOutputStream());  
+            // 把数据写入Blockchain  
+            out.write("Request_id=Request_id&user_A=userFrom&user_B=userTo&seller_A=sellerFrom&seller_B=sellerTo&point_A=pointFrom&point_B=pointTo");  
+            out.flush();  
+            out.close();  
+              
+            // 从blockchain读取响应  
+            InputStream inputStream = urlConnection.getInputStream();  
+            String encoding = urlConnection.getContentEncoding();  
+            String respond = IOUtils.toString(inputStream, encoding);  
+            System.out.println(respond);  
+            
+            JSONObject jsonObject=new JSONObject();		
+    		String response=jsonObject.getString("respond");		
+    		//System.out.println("RESPOND_CODE:"+response);	
+    		if(response.equals('1')){
+    		return true;
+    		}else{
+    		return false;
+    		}
+        }catch(IOException e){ 
+        	e.printStackTrace();
+        }
+		return true; 								
+
+}
 
 }
