@@ -53,8 +53,8 @@ public class PlatformServiceImp implements PlatformService {
 	@Override
 	public List<Offer> showRecommendationList(Integer sellerFrom, Integer sellerTo, Integer pointsFrom,
 			Integer pointsToMin) {
-		List<Offer> offers = PlatformDaoImp.showRecommendationList(sellerFrom, sellerTo, pointsFrom, pointsToMin);
-		return offers;
+		List<Offer> list = PlatformDaoImp.showRecommendationList(sellerFrom, sellerTo, pointsFrom, pointsToMin);
+		return list;
 	}
 
 	@Override
