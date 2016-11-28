@@ -10,6 +10,8 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
 
 import model.Notification;
 import model.Offer;
@@ -122,9 +124,25 @@ public class PlatformController {
 		return new PlatformDaoImp().searchExcahnge(sellerFrom, sellerTo, pointsFrom, pointsToMin); 
 	 }
 	 
-	 public List<Offer> showRecommendationList(Integer sellerFrom, Integer sellerTo, Integer pointsFrom, Integer pointsToMin){
-		return new PlatformDaoImp().searchExcahnge(sellerFrom, sellerTo, pointsFrom, pointsToMin); 
-	 }
+	 @RequestMapping("/showRecommendationList")  
+		public void showRecommendationList(HttpServletRequest req, HttpServletResponse resp,
+				String sellerFrom,
+				String sellerTo,String pointsFrom,String pointsToMin  ) throws ServletException, IOException {
+
+			
+			int sellerfrom = Integer.valueOf(sellerFrom);
+			int sellerto = Integer.valueOf(sellerTo);
+			int pointsfrom = Integer.valueOf(pointsFrom);
+			int pointstoMin = Integer.valueOf(pointsToMin);
+			
+			List<Offer> list=PlatformServiceImp.showRecommendationList(sellerfrom, sellerto,
+					pointsfrom, pointstoMin);		
+			req.getSession().setAttribute("list", list);
+			RequestDispatcher dispatcher = req
+				    .getRequestDispatcher("/showRemmendationResultsList.jsp");
+				  dispatcher.forward(req, resp);
+
+		}
 	 
 	 
 	 
