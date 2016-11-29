@@ -1,6 +1,42 @@
 package model;
 
+import java.sql.Timestamp;
+
+import javax.persistence.Transient;
+
 public class Request {
+	public String getUserNameFrom() {
+		return userNameFrom;
+	}
+
+	public void setUserNameFrom(String userNameFrom) {
+		this.userNameFrom = userNameFrom;
+	}
+
+	public String getUserNameTo() {
+		return userNameTo;
+	}
+
+	public void setUserNameTo(String userNameTo) {
+		this.userNameTo = userNameTo;
+	}
+
+	public String getSellerNameFrom() {
+		return sellerNameFrom;
+	}
+
+	public void setSellerNameFrom(String sellerNameFrom) {
+		this.sellerNameFrom = sellerNameFrom;
+	}
+
+	public String getSellerNameTo() {
+		return sellerNameTo;
+	}
+
+	public void setSellerNameTo(String sellerNameTo) {
+		this.sellerNameTo = sellerNameTo;
+	}
+
 	int Rid;
 	int userFrom;
 	int userTo;
@@ -10,7 +46,15 @@ public class Request {
 	int pointsTo;
 	int offerFrom;
 	int offerTo;
-	String updateTime;
+	@Transient
+	String userNameFrom;
+	@Transient
+	String userNameTo;
+	@Transient
+	String sellerNameFrom;
+	@Transient
+	String sellerNameTo;
+	Timestamp updateTime;
 	String status;
 
 	public int getRid() {
@@ -85,11 +129,11 @@ public class Request {
 		this.offerTo = offerTo;
 	}
 
-	public String getUpdateTime() {
+	public Timestamp getUpdateTime() {
 		return updateTime;
 	}
 
-	public void setUpdateTime(String updateTime) {
+	public void setUpdateTime(Timestamp updateTime) {
 		this.updateTime = updateTime;
 	}
 
@@ -100,5 +144,6 @@ public class Request {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+	
 
 }

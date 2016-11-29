@@ -2,17 +2,12 @@ package dao;
 
 import javax.annotation.Resource;
 
-import java.util.List;
-
-import model.advertisement;
+import model.activation_code;
 import model.seller;
-import service.SellerManagementService;
 
-import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 
@@ -42,6 +37,15 @@ public class SellerManagementDaoImp implements SellerManagementDao {
 		Query query = getSession().createQuery(hql);
 		query.setString("username", username);
 		query.setString("password", password);
+		seller Seller = (seller) query.uniqueResult();
+		return Seller;
+	}
+	
+	@Override
+	public seller validateUsername(String username) {
+		String hql = "from seller where Seller_Username= :username";
+		Query query = getSession().createQuery(hql);
+		query.setString("username", username);
 		seller Seller = (seller) query.uniqueResult();
 		return Seller;
 	}
@@ -133,6 +137,37 @@ public class SellerManagementDaoImp implements SellerManagementDao {
 		seller s=(seller) getSession().createQuery("from Seller where sellerid=:seller ").setInteger("sellerid", Seller_id).uniqueResult();
 		return s;
 	}
-
-
+	
+	@Override
+	public boolean checkActivationCode(String code, String sellerid){
+		String hql = "from activation_code where Seller_id= :Seller_id and Activation_Code= :Activation_Code";
+		Query query = getSession().createQuery(hql);
+		query.setString("Seller_id", sellerid);
+		query.setString("Activation_Code", code);
+		activation_code record = (activation_code) query.uniqueResult();
+		if(record==null){
+		return false;
+		}else{
+			return true;
+		}
+	}
+	
+	public boolean updateSellerStatus(String sellerid){
+		String hql = "from seller where Seller_id=:Seller_id";
+		Query query = getSession().createQuery(hql);
+		query.setString("Seller_id", sellerid);
+		seller Seller = (seller) query.uniqueResult();
+		String a = Seller.getSeller_Status();
+		if(a.equals("1")){
+			return false;
+		}
+		else{
+		String hql2 = "update seller set Seller_Status =:Seller_Status where Seller_id=:Seller_id";
+		Query query2 = getSession().createQuery(hql2);
+		query2.setString("Seller_Status", "1");
+		query2.setInteger("Seller_id",Integer.parseInt(sellerid));
+		query2.executeUpdate();
+		return true;
+		}
+	}
 }

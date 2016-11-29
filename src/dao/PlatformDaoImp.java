@@ -87,10 +87,10 @@ public class PlatformDaoImp implements PlatformDao {
 		List<Request> requests = query.list();
 		return requests;
 	}
-	
+
 	@Override
 	public List<Request> showUserReceivedRequest(Integer user_id, String status) {
-		List<Request> requests = null; 
+		List<Request> requests = null;
 		String sql = "from Request where userTo=?0 and status=?1 order by updateTime desc";
 		Query query = getSession().createQuery(sql);
 		query.setInteger(0, user_id);
@@ -99,10 +99,10 @@ public class PlatformDaoImp implements PlatformDao {
 		requests = query.list();
 		return requests;
 	}
-	
+
 	@Override
 	public List<Request> showUserSentRequest(Integer user_id, String status) {
-		List<Request> requests = null; 
+		List<Request> requests = null;
 		String sql = "from Request where userFrom=?0 and status=?1 order by updateTime desc";
 		Query query = getSession().createQuery(sql);
 		query.setInteger(0, user_id);
@@ -111,7 +111,7 @@ public class PlatformDaoImp implements PlatformDao {
 		requests = query.list();
 		return requests;
 	}
-	
+
 	@Override
 	public List<Offer> showUserOfferList(Integer user_id, String status) {
 		List<Offer> list = new ArrayList<Offer>();
@@ -123,8 +123,6 @@ public class PlatformDaoImp implements PlatformDao {
 		list.add(offer);
 		return list;
 	}
-
-
 
 	@Override
 	public List<Offer> showRecommendationList(Integer sellerFrom, Integer sellerTo, Integer pointsFrom,
@@ -283,7 +281,8 @@ public class PlatformDaoImp implements PlatformDao {
 	@Override
 	public Request requestData(Integer request_id) {
 		// TODO Auto-generated method stub
-		String sql = "from Request where request_id:Rid";
+		String sql = "from Request where Rid=:Rid";
+
 		Query query = getSession().createQuery(sql);
 		query.setInteger("Rid", request_id);
 		Request request = (Request) query.uniqueResult();
@@ -410,46 +409,50 @@ public class PlatformDaoImp implements PlatformDao {
 		List<Notification> notif_list = query.list();
 		return notif_list;
 	}
-	@Override
-	public boolean sendExchangeToBlockChain(Integer Request_id,
-			Integer userFrom, Integer userTo, Integer sellerFrom,
-			Integer sellerTo, Integer pointFrom, Integer pointTo) {
-		// TODO Auto-generated method stub		
-		//String sr=HttpRequest.sendPost("http://ccpx-blockchain.mybluemix.net/getTxInfo","Request_id=Request_id&user_A=userFrom&user_B=userTo&seller_A=sellerFrom&seller_B=sellerTo&point_A=pointFrom&point_B=pointTo&time=time");
-        try{  
-            // Configure and open a connection to the site you will send the request  
-            URL url = new URL("http://ccpx-blockchain.mybluemix.net/getTxInfo");  
-            URLConnection urlConnection = url.openConnection();  
-            // set attribute of doOutput as true,表示将使用此urlConnection写入数据  
-            urlConnection.setDoOutput(true);  
-            // 定义待写入数据的内容类型，这里设置为application/x-www-form-urlencoded类型  
-            urlConnection.setRequestProperty("content-type", "application/x-www-form-urlencoded");  
-            // 得到请求的输出流对象  
-            OutputStreamWriter out = new OutputStreamWriter(urlConnection.getOutputStream());  
-            // 把数据写入Blockchain  
-            out.write("Request_id=Request_id&user_A=userFrom&user_B=userTo&seller_A=sellerFrom&seller_B=sellerTo&point_A=pointFrom&point_B=pointTo");  
-            out.flush();  
-            out.close();  
-              
-            // 从blockchain读取响应  
-            InputStream inputStream = urlConnection.getInputStream();  
-            String encoding = urlConnection.getContentEncoding();  
-            String respond = IOUtils.toString(inputStream, encoding);  
-            System.out.println(respond);  
-            
-            JSONObject jsonObject=new JSONObject();		
-    		String response=jsonObject.getString("respond");		
-    		//System.out.println("RESPOND_CODE:"+response);	
-    		if(response.equals('1')){
-    		return true;
-    		}else{
-    		return false;
-    		}
-        }catch(IOException e){ 
-        	e.printStackTrace();
-        }
-		return true; 								
 
-}
+	@Override
+	public boolean sendExchangeToBlockChain(Integer Request_id, Integer userFrom, Integer userTo, Integer sellerFrom,
+			Integer sellerTo, Integer pointFrom, Integer pointTo) {
+		// TODO Auto-generated method stub
+		// String
+		// sr=HttpRequest.sendPost("http://ccpx-blockchain.mybluemix.net/getTxInfo","Request_id=Request_id&user_A=userFrom&user_B=userTo&seller_A=sellerFrom&seller_B=sellerTo&point_A=pointFrom&point_B=pointTo&time=time");
+		try {
+			// Configure and open a connection to the site you will send the
+			// request
+			URL url = new URL("http://ccpx-blockchain.mybluemix.net/getTxInfo");
+			URLConnection urlConnection = url.openConnection();
+			System.out.println("send block Chain after URL");
+			// set attribute of doOutput as true,表示将使用此urlConnection写入数据
+			urlConnection.setDoOutput(true);
+			// 定义待写入数据的内容类型，这里设置为application/x-www-form-urlencoded类型
+			urlConnection.setRequestProperty("content-type", "application/x-www-form-urlencoded");
+			// 得到请求的输出流对象
+			OutputStreamWriter out = new OutputStreamWriter(urlConnection.getOutputStream());
+			// 把数据写入Blockchain
+			out.write(
+					"Request_id=Request_id&user_A=userFrom&user_B=userTo&seller_A=sellerFrom&seller_B=sellerTo&point_A=pointFrom&point_B=pointTo");
+			out.flush();
+			out.close();
+
+			// 从blockchain读取响应
+			InputStream inputStream = urlConnection.getInputStream();
+			String encoding = urlConnection.getContentEncoding();
+			String respond = IOUtils.toString(inputStream, encoding);
+			System.out.println(respond);
+
+			JSONObject jsonObject = new JSONObject();
+			String response = jsonObject.getString("respond");
+			// System.out.println("RESPOND_CODE:"+response);
+			if (response.equals('1')) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return true;
+
+	}
 
 }

@@ -84,6 +84,7 @@ public class PlatformServiceImp implements PlatformService {
 
 	@Override
 	public Boolean acceptRequest(Integer request_id) {
+		System.out.println("enter accept request in serviceImp");
 		Request request = new Request();
 		Integer UserFrom = request.getUserFrom();
 		Integer UserTo = request.getUserTo();
@@ -94,13 +95,17 @@ public class PlatformServiceImp implements PlatformService {
 		Integer OfferFrom = request.getOfferFrom();
 		Integer OfferTo = request.getOfferTo();
 		request = PlatformDaoImp.requestData(request_id);
-		Boolean success = PlatformDaoImp.sendExchangeToBlockChain(request_id,
-				UserFrom, UserTo, SellerFrom,
-				SellerTo, PointsFrom, PointsTo);
-		// call notification notifi(OfferFrom) notifi(OfferTo) notifi(UserFrom)
+		System.out.println("Succes read request data"+request);
+//		Boolean success = PlatformDaoImp.sendExchangeToBlockChain(request_id,
+//				UserFrom, UserTo, SellerFrom,
+//				SellerTo, PointsFrom, PointsTo);
+//		// call notification notifi(OfferFrom) notifi(OfferTo) notifi(UserFrom)
 		// notifi(UserTo)
+		//System.out.println("Succes send to BC"+success);
 		Boolean acc = PlatformDaoImp.acceptRequest(request_id, OfferFrom, OfferTo);
+		System.out.println("Succes accept request");
 		List<Integer> requestList = PlatformDaoImp.listOfRequest(OfferFrom, OfferTo);
+		System.out.println("Succes read request list"+requestList);
 		requestList.remove(request_id);
 		for (int i = 0; i < requestList.size(); i++) {
 			Integer r1 = requestList.get(i);

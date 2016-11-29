@@ -74,7 +74,7 @@ public class PlatformController {
 	}
 	
 	 @RequestMapping("/acceptRequest")
-	 public String acceptRequest(HttpServletRequest req, Integer request_id){
+	 public String acceptRequest(@RequestParam Integer request_id){
 		int requestID = request_id;
 		Boolean flag = PlatformServiceImp.acceptRequest(requestID);
 		System.out.println("flag: " + flag);
